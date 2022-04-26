@@ -1,4 +1,8 @@
 import React from 'react';
+import drinkIcon from '../images/drinkIcon.svg';
+import exploreIcon from '../images/exploreIcon.svg';
+import mealIcon from '../images/mealIcon.svg';
+import './Footer.css';
 
 function Footer() {
   const handleClick = ({ target: { name } }) => {
@@ -14,16 +18,18 @@ function Footer() {
         data-testid="drinks-bottom-btn"
         name="drinks"
         onClick={ handleClick }
+        src={ drinkIcon }
       >
-        DRINKS ICON
+        <img src={ drinkIcon } alt="drink icon" />
       </button>
       <button
         type="button"
         data-testid="explore-bottom-btn"
         name="explore"
         onClick={ handleClick }
+        src={ exploreIcon }
       >
-        EXPLORE ICON
+        <img src={ exploreIcon } alt="explore icon" />
       </button>
 
       <button
@@ -31,8 +37,9 @@ function Footer() {
         data-testid="food-bottom-btn"
         name="food"
         onClick={ handleClick }
+        src={ mealIcon }
       >
-        FOODS ICON
+        <img src={ mealIcon } alt="meal icon" />
       </button>
     </footer>
   );
