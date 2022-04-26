@@ -1,10 +1,14 @@
 import React from 'react';
+import Header from '../components/Header';
 
 function FoodIngredients() {
   return (
-    <h1>
-      FoodIngredients
-    </h1>
+    <>
+      <Header title="Explore Ingredients" searchOn={ false } />
+      <h1>
+        FoodIngredients
+      </h1>
+    </>
   );
 }
 

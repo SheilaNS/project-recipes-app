@@ -1,10 +1,14 @@
 import React from 'react';
+import Header from '../components/Header';
 
 function Drinks() {
   return (
-    <h1>
-      Drinks
-    </h1>
+    <>
+      <Header title="Drinks" searchOn />
+      <h1>
+        Drinks
+      </h1>
+    </>
   );
 }
 

@@ -1,10 +1,14 @@
 import React from 'react';
+import Header from '../components/Header';
 
 function Nationalities() {
   return (
-    <h1>
-      Nationalities
-    </h1>
+    <>
+      <Header title="Explore Nationalities" searchOn />
+      <h1>
+        Nationalities
+      </h1>
+    </>
   );
 }
 
