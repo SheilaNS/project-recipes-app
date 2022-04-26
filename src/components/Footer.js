@@ -1,12 +1,14 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import drinkIcon from '../images/drinkIcon.svg';
 import exploreIcon from '../images/exploreIcon.svg';
 import mealIcon from '../images/mealIcon.svg';
 import './Footer.css';
 
 function Footer() {
-  const handleClick = ({ target: { name } }) => {
-    console.log(name);
+  const history = useHistory();
+  const handleClick = ({ currentTarget: { name } }) => {
+    history.push(`/${name}`);
   };
 
   return (
@@ -35,7 +37,7 @@ function Footer() {
       <button
         type="button"
         data-testid="food-bottom-btn"
-        name="food"
+        name="foods"
         onClick={ handleClick }
         src={ mealIcon }
       >
