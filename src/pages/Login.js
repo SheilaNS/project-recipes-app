@@ -18,6 +18,11 @@ function Login() {
     return password.length > minPassLength && email.match(validEmail);
   };
 
+  const handleClick = () => {
+    localStorage.setItem('mealsToken', '1');
+    localStorage.setItem('cocktailsToken', '1');
+  };
+
   return (
     <form>
       <input
@@ -36,6 +41,7 @@ function Login() {
         type="button"
         data-testid="login-submit-btn"
         disabled={ !formValidation() }
+        onClick={ handleClick }
       >
         Enter
       </button>
