@@ -13,6 +13,16 @@ function AppProvider({ children }) {
 
   useEffect(() => {
     const fetchAPI = async () => {
+      const newMeals = await fetchMeals(searchData);
+      setMeals(newMeals);
+      const newDrinks = await fetchMeals(searchData);
+      setDrinks(newDrinks);
+    };
+    fetchAPI();
+  }, []);
+
+  useEffect(() => {
+    const fetchAPI = async () => {
       const isNull = (arg, func) => {
         if (arg === null) {
           global.alert('Sorry, we haven\'t found any recipes for these filters.');

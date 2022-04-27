@@ -8,6 +8,7 @@ const urlGenerator = ({ filter, value }) => {
   if (filter === 'letter') {
     return `https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${value}`;
   }
+  return 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
 };
 
 const fetchDrinks = async (inputValues) => {
