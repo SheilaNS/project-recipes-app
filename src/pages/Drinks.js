@@ -12,16 +12,15 @@ function Drinks() {
       <Header title="Drinks" searchOn />
       <Footer />
       {drinks.length > 1 && (
-        drinks.map(({ strDrink, strDrinkThumb }, index) => {
+        drinks.reduce((acc, curr, index) => {
           const maxCards = 12;
-          if (index < maxCards) {
-            return (<Cards
-              recipe={ { recipeName: strDrink, recipeImg: strDrinkThumb, index } }
-              key={ index }
-            />);
-          }
-          return null;
-        })
+          if (index < maxCards) acc = [...acc, curr];
+          return acc;
+        }, [])
+          .map(({ strDrink, strDrinkThumb }, index) => (<Cards
+            recipe={ { recipeName: strDrink, recipeImg: strDrinkThumb, index } }
+            key={ index }
+          />))
       )}
     </>
   );

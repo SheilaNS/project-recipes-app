@@ -12,16 +12,15 @@ function Foods() {
       <Header title="Foods" searchOn />
       <Footer />
       {meals.length > 1 && (
-        meals.map(({ strMeal, strMealThumb }, index) => {
-          const maxCards = 10;
-          if (index < maxCards) {
-            return (<Cards
-              recipe={ { recipeName: strMeal, recipeImg: strMealThumb, index } }
-              key={ index }
-            />);
-          }
-          return null;
-        })
+        meals.reduce((acc, curr, index) => {
+          const maxCards = 12;
+          if (index < maxCards) acc = [...acc, curr];
+          return acc;
+        }, [])
+          .map(({ strMeal, strMealThumb }, index) => (<Cards
+            recipe={ { recipeName: strMeal, recipeImg: strMealThumb, index } }
+            key={ index }
+          />))
       )}
     </>
   );
