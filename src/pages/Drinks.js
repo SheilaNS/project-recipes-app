@@ -5,12 +5,26 @@ import Header from '../components/Header';
 import AppContext from '../context/AppContext';
 
 function Drinks() {
-  const { drinks } = useContext(AppContext);
+  const { drinks, categories } = useContext(AppContext);
 
   return (
     <>
       <Header title="Drinks" searchOn />
-      <Footer />
+      {categories.drink && categories.drink
+        .reduce((acc, curr, index) => {
+          const maxCategories = 5;
+          if (index < maxCategories) acc = [...acc, curr];
+          return acc;
+        }, [])
+        .map(({ strCategory }) => (
+          <button
+            key={ strCategory }
+            type="button"
+            data-testid={ `${strCategory}-category-filter` }
+          >
+            {strCategory}
+          </button>
+        ))}
       {drinks.length > 1 && (
         drinks.reduce((acc, curr, index) => {
           const maxCards = 12;
@@ -22,6 +36,7 @@ function Drinks() {
             key={ index }
           />))
       )}
+      <Footer />
     </>
   );
 }

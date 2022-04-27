@@ -1,22 +1,26 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import fetchDrinks from '../services/fetchDrinks';
-import fetchMeals from '../services/fetchFoods';
+import { fetchDrinkCategories, fetchDrinks } from '../services/fetchDrinks';
+import { fetchFoodCategories, fetchMeals } from '../services/fetchFoods';
 import AppContext from './AppContext';
 
 function AppProvider({ children }) {
   const [searchData, setSearchData] = useState({ filter: '', value: '', page: '' });
   const [meals, setMeals] = useState([]);
   const [drinks, setDrinks] = useState([]);
+  const [categories, setCategories] = useState({ food: [], drink: [] });
   const history = useHistory();
 
   useEffect(() => {
     const fetchAPI = async () => {
       const newMeals = await fetchMeals(searchData);
       setMeals(newMeals);
+      const food = await fetchFoodCategories();
       const newDrinks = await fetchDrinks(searchData);
       setDrinks(newDrinks);
+      const drink = await fetchDrinkCategories();
+      setCategories({ food, drink });
     };
     fetchAPI();
   }, []);
@@ -66,6 +70,7 @@ function AppProvider({ children }) {
         setSearchData,
         meals,
         drinks,
+        categories,
       } }
     >
       {children}
