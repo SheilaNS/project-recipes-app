@@ -1,14 +1,14 @@
-// // Filters
-// const URL_AREA = `www.themealdb.com/api/json/v1/1/filter.php?a=${area}`;
-// const URL_CATEGORY = `www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
+const urlGenerator = ({ filter, value }) => {
+  if (filter === 'ingredient') return `https://www.themealdb.com/api/json/v1/1/filter.php?i=${value}`;
+  if (filter === 'name') return `https://www.themealdb.com/api/json/v1/1/search.php?s=${value}`;
+  if (filter === 'letter') return `https://www.themealdb.com/api/json/v1/1/search.php?f=${value}`;
+  return 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+};
 
-// // Search
-// const URL_SEARCH_BY_NAME = `www.themealdb.com/api/json/v1/1/search.php?s=${searchName}`;
-// const URL_LETTER = `www.themealdb.com/api/json/v1/1/search.php?f=${letter}`;
-// const URL_INGREDIENT = `www.themealdb.com/api/json/v1/1/filter.php?i=${ingredient}`;
+const fetchMeals = async (inputValues) => {
+  const results = await fetch(urlGenerator(inputValues));
+  const data = await results.json();
+  return data.meals;
+};
 
-// // Details
-// const URL_MEAL_ID = `www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
-
-// // Lists
-// const URL_CAT_LIST = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
+export default fetchMeals;
