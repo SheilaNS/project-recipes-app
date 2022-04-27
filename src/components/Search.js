@@ -1,10 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import AppContext from '../context/AppContext';
-// import { useHistory } from 'react-router-dom';
 
 function Search() {
-  // const history = useHistory();
   const location = useLocation();
   const [searchInputData, setSearchInputData] = useState({
     filter: '', value: '', page: location.pathname,
