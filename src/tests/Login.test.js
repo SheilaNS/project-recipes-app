@@ -16,48 +16,45 @@ const renderPath = (path) => {
   return { ...resources, history };
 };
 
-const EMAIL_INPUT = screen.getByTestId('email-input');
-const PASSWORD_INPUT = screen.getByTestId('password-input');
-const LOGIN_SUBMIT_BTN = screen.getByTestId('login-submit-btn');
+const EMAIL_INPUT = 'email-input';
+const PASSWORD_INPUT = 'password-input';
+const LOGIN_SUBMIT_BTN = 'login-submit-btn';
 const DEF_EMAIL = 'user@user.com';
+
 const userActions = () => {
-  userEvent.type(EMAIL_INPUT, DEF_EMAIL);
-  userEvent.type(PASSWORD_INPUT, 'Password');
-  userEvent.click(LOGIN_SUBMIT_BTN);
+  userEvent.type(screen.getByTestId(EMAIL_INPUT), DEF_EMAIL);
+  userEvent.type(screen.getByTestId(PASSWORD_INPUT), 'Password');
+  userEvent.click(screen.getByTestId(LOGIN_SUBMIT_BTN));
 };
 
-describe('2 - Crie um formulário para identificação', () => {
+describe('Tela de Login', () => {
   beforeEach(() => {
     localStorage.clear();
     renderPath('/');
   });
   it('Ao navegar para a rota /, os inputs e o botão especificados estão presentes',
     () => {
-      expect(EMAIL_INPUT).toBeInTheDocument();
-      expect(PASSWORD_INPUT).toBeInTheDocument();
-      expect(LOGIN_SUBMIT_BTN).toBeInTheDocument();
+      expect(screen.getByTestId(EMAIL_INPUT)).toBeInTheDocument();
+      expect(screen.getByTestId(PASSWORD_INPUT)).toBeInTheDocument();
+      expect(screen.getByTestId(LOGIN_SUBMIT_BTN)).toBeInTheDocument();
     });
   it('O botão só é habilitado se e-mail e senha forem válidos',
     () => {
-      expect(EMAIL_INPUT.value).toBe('');
-      expect(PASSWORD_INPUT.value).toBe('');
-      expect(LOGIN_SUBMIT_BTN).toBeDisabled();
-
-      userEvent.type(PASSWORD_INPUT, 'Pass');
-      expect(PASSWORD_INPUT.value).toBe('Pass');
-      expect(LOGIN_SUBMIT_BTN).toBeDisabled();
-
-      userEvent.type(EMAIL_INPUT, 'user');
-      expect(EMAIL_INPUT.value).toBe('user');
-      expect(LOGIN_SUBMIT_BTN).toBeDisabled();
-
-      userEvent.type(PASSWORD_INPUT, 'word');
-      expect(PASSWORD_INPUT.value).toBe('Password');
-      expect(LOGIN_SUBMIT_BTN).toBeDisabled();
-
-      userEvent.type(EMAIL_INPUT, '@user.com');
-      expect(EMAIL_INPUT.value).toBe(DEF_EMAIL);
-      expect(LOGIN_SUBMIT_BTN).toBeEnabled();
+      expect(screen.getByTestId(EMAIL_INPUT).value).toBe('');
+      expect(screen.getByTestId(PASSWORD_INPUT).value).toBe('');
+      expect(screen.getByTestId(LOGIN_SUBMIT_BTN)).toBeDisabled();
+      userEvent.type(screen.getByTestId(PASSWORD_INPUT), 'Pass');
+      expect(screen.getByTestId(PASSWORD_INPUT).value).toBe('Pass');
+      expect(screen.getByTestId(LOGIN_SUBMIT_BTN)).toBeDisabled();
+      userEvent.type(screen.getByTestId(EMAIL_INPUT), 'user');
+      expect(screen.getByTestId(EMAIL_INPUT).value).toBe('user');
+      expect(screen.getByTestId(LOGIN_SUBMIT_BTN)).toBeDisabled();
+      userEvent.type(screen.getByTestId(PASSWORD_INPUT), 'Password');
+      expect(screen.getByTestId(PASSWORD_INPUT).value).toBe('Password');
+      expect(screen.getByTestId(LOGIN_SUBMIT_BTN)).toBeDisabled();
+      userEvent.type(screen.getByTestId(EMAIL_INPUT), 'user@user.com');
+      expect(screen.getByTestId(EMAIL_INPUT).value).toBe(DEF_EMAIL);
+      expect(screen.getByTestId(LOGIN_SUBMIT_BTN)).toBeEnabled();
     });
   it(
     'Ao clicar no botão habilitado, tokens e e-mail são salvos no localStorage',
@@ -66,9 +63,9 @@ describe('2 - Crie um formulário para identificação', () => {
       const storedEmail = JSON.parse(localStorage.getItem('user')).email;
       expect(storedEmail).toBe(DEF_EMAIL);
       const storedMealsToken = JSON.parse(localStorage.getItem('mealsToken'));
-      expect(storedMealsToken).toBe('1');
+      expect(storedMealsToken).toBe(1);
       const storedDrinksToken = JSON.parse(localStorage.getItem('cocktailsToken'));
-      expect(storedDrinksToken).toBe('1');
+      expect(storedDrinksToken).toBe(1);
     },
   );
   it('Será validado se ao clicar no botão acontece o redirecionamento para a rota /foods',
