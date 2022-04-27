@@ -15,7 +15,7 @@ function AppProvider({ children }) {
     const fetchAPI = async () => {
       const newMeals = await fetchMeals(searchData);
       setMeals(newMeals);
-      const newDrinks = await fetchMeals(searchData);
+      const newDrinks = await fetchDrinks(searchData);
       setDrinks(newDrinks);
     };
     fetchAPI();
