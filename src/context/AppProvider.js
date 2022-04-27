@@ -13,14 +13,19 @@ function AppProvider({ children }) {
 
   useEffect(() => {
     const fetchAPI = async () => {
+      const isNull = (arg, func) => {
+        if (arg === null) {
+          global.alert('Sorry, we haven\'t found any recipes for these filters.');
+        } else func(arg);
+      };
       const { filter, value } = searchData;
       if (filter.length && value.length) {
         if (searchData.page === '/foods') {
           const newData = await fetchMeals({ filter, value });
-          setMeals(newData);
+          isNull(newData, setMeals);
         } else {
           const newData = await fetchDrinks({ filter, value });
-          setDrinks(newData);
+          isNull(newData, setDrinks);
         }
       }
     };
