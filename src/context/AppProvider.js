@@ -1,16 +1,8 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import {
-  fetchDrinkCategories,
-  fetchDrinks,
-  fetchFilterDrinkCategories,
-} from '../services/fetchDrinks';
-import {
-  fetchFoodCategories,
-  fetchMeals,
-  // fetchFilterFoodCategories,
-} from '../services/fetchFoods';
+import { fetchDrinkByCat, fetchDrinkCat, fetchDrinks } from '../services/fetchDrinks';
+import { fetchFoodByCat, fetchFoodCat, fetchMeals } from '../services/fetchFoods';
 import AppContext from './AppContext';
 
 function AppProvider({ children }) {
@@ -21,27 +13,27 @@ function AppProvider({ children }) {
   const [filterCategory, setFilterCategory] = useState({ category: '', page: '' });
   const history = useHistory();
 
-  useEffect(() => {
-    const fetchAPI = async () => {
-      const newMeals = await fetchMeals(searchData);
-      setMeals(newMeals);
-      const food = await fetchFoodCategories();
-      const newDrinks = await fetchDrinks(searchData);
-      setDrinks(newDrinks);
-      const drink = await fetchDrinkCategories();
-      setCategories({ food, drink });
-    };
-    fetchAPI();
-  }, []);
-
-  const isNull = (arg, func) => {
-    if (arg === null) {
-      global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    } else func(arg);
+  const fetchAPI = async () => {
+    const newMeals = await fetchMeals({ filter: '', value: '' });
+    setMeals(newMeals);
+    const food = await fetchFoodCat();
+    const newDrinks = await fetchDrinks({ filter: '', value: '' });
+    setDrinks(newDrinks);
+    const drink = await fetchDrinkCat();
+    setCategories({ food, drink });
   };
 
   useEffect(() => {
-    const fetchAPI = async () => {
+    fetchAPI();
+  }, []);
+
+  useEffect(() => {
+    const fetchSearchAPI = async () => {
+      const isNull = (arg, func) => {
+        if (arg === null) {
+          global.alert('Sorry, we haven\'t found any recipes for these filters.');
+        } else func(arg);
+      };
       const { filter, value } = searchData;
       if (filter.length && value.length) {
         if (searchData.page === '/foods') {
@@ -53,34 +45,29 @@ function AppProvider({ children }) {
         }
       }
     };
-    fetchAPI();
+    fetchSearchAPI();
   }, [searchData]);
 
   useEffect(() => {
     const fetchCatAPI = async () => {
-      console.log(filterCategory);
       const { category, page } = filterCategory;
       if (category !== '') {
         if (page === '/foods') {
-          const url = `www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
-          const results = await fetch(url);
-          console.log('results', results);
-          const data = await results.json();
-          console.log('data', data);
-          console.log(data);
-          isNull(setMeals, data.meals);
+          const newData = await fetchFoodByCat(category);
+          console.log(newData);
+          setMeals(newData);
         } else {
-          const newData = await fetchFilterDrinkCategories(category);
-          isNull(setDrinks, newData);
+          const newData = await fetchDrinkByCat(category);
+          setDrinks(newData);
         }
-      }
+      } else fetchAPI();
     };
     fetchCatAPI();
   }, [filterCategory]);
 
   useEffect(() => {
     const redirectSingleMeal = () => {
-      if (meals.length === 1) {
+      if (meals.length === 1 && filterCategory.category !== 'Goat') {
         history.push(`/foods/${meals[0].idMeal}`);
       }
     };

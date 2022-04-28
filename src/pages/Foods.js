@@ -10,7 +10,6 @@ function Foods() {
   const location = useLocation();
 
   const handleClick = ({ target: { value } }) => {
-    console.log(value);
     setFilterCategory({ category: value, page: location.pathname });
   };
 
@@ -34,7 +33,7 @@ function Foods() {
             { strCategory }
           </button>
         ))}
-      {meals.length > 1 && (
+      {meals.length && (
         meals.reduce((acc, curr, index) => {
           const maxCards = 12;
           if (index < maxCards) acc = [...acc, curr];

@@ -11,15 +11,14 @@ export const fetchMeals = async (inputValues) => {
   return data.meals;
 };
 
-export const fetchFoodCategories = async () => {
+export const fetchFoodCat = async () => {
   const results = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?c=list');
   const data = await results.json();
   return data.meals;
 };
 
-export const fetchFilterFoodCategories = async (value) => {
-  console.log('fetchLog', value);
-  const results = await fetch(`www.themealdb.com/api/json/v1/1/filter.php?c=${value}`);
+export const fetchFoodByCat = async (value) => {
+  const results = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${value}`);
   const data = await results.json();
   return data.meals;
 };
