@@ -1,8 +1,16 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { fetchDrinkCategories, fetchDrinks } from '../services/fetchDrinks';
-import { fetchFoodCategories, fetchMeals } from '../services/fetchFoods';
+import {
+  fetchDrinkCategories,
+  fetchDrinks,
+  fetchFilterDrinkCategories,
+} from '../services/fetchDrinks';
+import {
+  fetchFoodCategories,
+  fetchMeals,
+  // fetchFilterFoodCategories,
+} from '../services/fetchFoods';
 import AppContext from './AppContext';
 
 function AppProvider({ children }) {
@@ -10,6 +18,7 @@ function AppProvider({ children }) {
   const [meals, setMeals] = useState([]);
   const [drinks, setDrinks] = useState([]);
   const [categories, setCategories] = useState({ food: [], drink: [] });
+  const [filterCategory, setFilterCategory] = useState({ category: '', page: '' });
   const history = useHistory();
 
   useEffect(() => {
@@ -25,13 +34,14 @@ function AppProvider({ children }) {
     fetchAPI();
   }, []);
 
+  const isNull = (arg, func) => {
+    if (arg === null) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    } else func(arg);
+  };
+
   useEffect(() => {
     const fetchAPI = async () => {
-      const isNull = (arg, func) => {
-        if (arg === null) {
-          global.alert('Sorry, we haven\'t found any recipes for these filters.');
-        } else func(arg);
-      };
       const { filter, value } = searchData;
       if (filter.length && value.length) {
         if (searchData.page === '/foods') {
@@ -45,6 +55,28 @@ function AppProvider({ children }) {
     };
     fetchAPI();
   }, [searchData]);
+
+  useEffect(() => {
+    const fetchCatAPI = async () => {
+      console.log(filterCategory);
+      const { category, page } = filterCategory;
+      if (category !== '') {
+        if (page === '/foods') {
+          const url = `www.themealdb.com/api/json/v1/1/filter.php?c=${category}`;
+          const results = await fetch(url);
+          console.log('results', results);
+          const data = await results.json();
+          console.log('data', data);
+          console.log(data);
+          isNull(setMeals, data.meals);
+        } else {
+          const newData = await fetchFilterDrinkCategories(category);
+          isNull(setDrinks, newData);
+        }
+      }
+    };
+    fetchCatAPI();
+  }, [filterCategory]);
 
   useEffect(() => {
     const redirectSingleMeal = () => {
@@ -71,6 +103,7 @@ function AppProvider({ children }) {
         meals,
         drinks,
         categories,
+        setFilterCategory,
       } }
     >
       {children}

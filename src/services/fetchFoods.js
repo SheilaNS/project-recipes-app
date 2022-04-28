@@ -16,3 +16,10 @@ export const fetchFoodCategories = async () => {
   const data = await results.json();
   return data.meals;
 };
+
+export const fetchFilterFoodCategories = async (value) => {
+  console.log('fetchLog', value);
+  const results = await fetch(`www.themealdb.com/api/json/v1/1/filter.php?c=${value}`);
+  const data = await results.json();
+  return data.meals;
+};
