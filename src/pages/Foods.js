@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Cards from '../components/Cards';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -58,10 +58,16 @@ function Foods() {
           if (index < maxCards) acc = [...acc, curr];
           return acc;
         }, [])
-          .map(({ strMeal, strMealThumb }, index) => (<Cards
-            recipe={ { recipeName: strMeal, recipeImg: strMealThumb, index } }
-            key={ index }
-          />))
+          .map(({ strMeal, strMealThumb, idMeal }, index) => (
+            <Link
+              key={ index }
+              to={ `/foods/${idMeal}` }
+            >
+              <Cards
+                recipe={ { recipeName: strMeal, recipeImg: strMealThumb, index } }
+              />
+            </Link>
+          ))
       )}
       <Footer />
     </>
