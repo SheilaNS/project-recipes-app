@@ -6,11 +6,15 @@ import Header from '../components/Header';
 import AppContext from '../context/AppContext';
 
 function Foods() {
-  const { meals, categories, setFilterCategory } = useContext(AppContext);
+  const { meals, categories, filterCategory, setFilterCategory } = useContext(AppContext);
   const location = useLocation();
 
   const handleClick = ({ target: { value } }) => {
-    setFilterCategory({ category: value, page: location.pathname });
+    if (filterCategory.category === value) {
+      setFilterCategory({ category: '', page: location.pathname });
+    } else {
+      setFilterCategory({ category: value, page: location.pathname });
+    }
   };
 
   return (

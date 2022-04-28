@@ -90,6 +90,7 @@ function AppProvider({ children }) {
         meals,
         drinks,
         categories,
+        filterCategory,
         setFilterCategory,
       } }
     >
