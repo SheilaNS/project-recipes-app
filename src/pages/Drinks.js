@@ -24,21 +24,36 @@ function Drinks() {
       <Header title="Drinks" searchOn />
       {categories.drink && categories.drink
         .reduce((acc, curr, index) => {
-          const maxCategories = 5;
+          const maxCategories = 6;
           if (index < maxCategories) acc = [...acc, curr];
           return acc;
         }, [])
-        .map(({ strCategory }) => (
-          <button
-            key={ strCategory }
-            type="button"
-            data-testid={ `${strCategory}-category-filter` }
-            value={ strCategory }
-            onClick={ handleClick }
-          >
-            {strCategory}
-          </button>
-        ))}
+        .map(({ strCategory }, index) => {
+          const allIndex = 5;
+          if (index === allIndex) {
+            return (
+              <button
+                type="button"
+                key="All"
+                data-testid="All-category-filter"
+                onClick={ handleClick }
+              >
+                All
+              </button>
+            );
+          }
+          return (
+            <button
+              key={ strCategory }
+              type="button"
+              data-testid={ `${strCategory}-category-filter` }
+              value={ strCategory }
+              onClick={ handleClick }
+            >
+              {strCategory}
+            </button>
+          );
+        })}
       {drinks.length > 1 && (
         drinks.reduce((acc, curr, index) => {
           const maxCards = 12;
