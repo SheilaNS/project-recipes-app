@@ -11,10 +11,21 @@ const urlGenerator = ({ filter, value }) => {
   return 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
 };
 
-const fetchDrinks = async (inputValues) => {
+export const fetchDrinks = async (inputValues) => {
   const results = await fetch(urlGenerator(inputValues));
   const data = await results.json();
   return data.drinks;
 };
 
-export default fetchDrinks;
+export const fetchDrinkCat = async () => {
+  const results = await fetch('https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list');
+  const data = await results.json();
+  return data.drinks;
+};
+
+export const fetchDrinkByCat = async (value) => {
+  const URL = `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${value}`;
+  const results = await fetch(URL);
+  const data = await results.json();
+  return data.drinks;
+};

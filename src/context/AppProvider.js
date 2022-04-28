@@ -1,28 +1,34 @@
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import fetchDrinks from '../services/fetchDrinks';
-import fetchMeals from '../services/fetchFoods';
+import { fetchDrinkByCat, fetchDrinkCat, fetchDrinks } from '../services/fetchDrinks';
+import { fetchFoodByCat, fetchFoodCat, fetchMeals } from '../services/fetchFoods';
 import AppContext from './AppContext';
 
 function AppProvider({ children }) {
   const [searchData, setSearchData] = useState({ filter: '', value: '', page: '' });
   const [meals, setMeals] = useState([]);
   const [drinks, setDrinks] = useState([]);
+  const [categories, setCategories] = useState({ food: [], drink: [] });
+  const [filterCategory, setFilterCategory] = useState({ category: '', page: '' });
   const history = useHistory();
 
+  const fetchAPI = async () => {
+    const newMeals = await fetchMeals({ filter: '', value: '' });
+    setMeals(newMeals);
+    const food = await fetchFoodCat();
+    const newDrinks = await fetchDrinks({ filter: '', value: '' });
+    setDrinks(newDrinks);
+    const drink = await fetchDrinkCat();
+    setCategories({ food, drink });
+  };
+
   useEffect(() => {
-    const fetchAPI = async () => {
-      const newMeals = await fetchMeals(searchData);
-      setMeals(newMeals);
-      const newDrinks = await fetchMeals(searchData);
-      setDrinks(newDrinks);
-    };
     fetchAPI();
   }, []);
 
   useEffect(() => {
-    const fetchAPI = async () => {
+    const fetchSearchAPI = async () => {
       const isNull = (arg, func) => {
         if (arg === null) {
           global.alert('Sorry, we haven\'t found any recipes for these filters.');
@@ -39,12 +45,29 @@ function AppProvider({ children }) {
         }
       }
     };
-    fetchAPI();
+    fetchSearchAPI();
   }, [searchData]);
 
   useEffect(() => {
+    const fetchCatAPI = async () => {
+      const { category, page } = filterCategory;
+      if (category !== '') {
+        if (page === '/foods') {
+          const newData = await fetchFoodByCat(category);
+          console.log(newData);
+          setMeals(newData);
+        } else {
+          const newData = await fetchDrinkByCat(category);
+          setDrinks(newData);
+        }
+      } else fetchAPI();
+    };
+    fetchCatAPI();
+  }, [filterCategory]);
+
+  useEffect(() => {
     const redirectSingleMeal = () => {
-      if (meals.length === 1) {
+      if (meals.length === 1 && filterCategory.category !== 'Goat') {
         history.push(`/foods/${meals[0].idMeal}`);
       }
     };
@@ -66,6 +89,9 @@ function AppProvider({ children }) {
         setSearchData,
         meals,
         drinks,
+        categories,
+        filterCategory,
+        setFilterCategory,
       } }
     >
       {children}
