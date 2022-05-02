@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import '../assets/DrinkRecipe.css';
 import Carousel from '../components/Carousel';
 import { fetchDrinkDetails } from '../services/fetchDrinks';
 
@@ -75,6 +76,7 @@ function DrinkRecipe() {
       </p>
       <Carousel />
       <button
+        className="start-recipe-btn"
         type="button"
         data-testid="start-recipe-btn"
       >

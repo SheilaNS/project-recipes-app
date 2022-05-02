@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import '../assets/FoodRecipe.css';
 import Carousel from '../components/Carousel';
 import { fetchFoodDetails } from '../services/fetchFoods';
 
@@ -92,6 +93,7 @@ function FoodRecipe() {
       <button
         type="button"
         data-testid="start-recipe-btn"
+        className="start-recipe-btn"
       >
         Start
       </button>
