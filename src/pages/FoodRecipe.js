@@ -11,6 +11,11 @@ function FoodRecipe() {
   const [ingredients, setIngredients] = useState([]);
   const [video, setVideo] = useState('');
 
+  const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+  const isVisible = doneRecipes ? !doneRecipes
+    .some(({ id }) => id === recipeDetails.idMeal)
+    : true;
+
   useEffect(() => {
     const fetchAPI = async () => {
       const details = await fetchFoodDetails(recipeId);
@@ -36,6 +41,27 @@ function FoodRecipe() {
     };
     fetchAPI();
   }, []);
+
+  const handleClick = () => {
+    const storage = JSON.parse(localStorage.getItem('doneRecipes'));
+    const today = new Date();
+    const doneRecipe = {
+      id: recipeDetails.idMeal,
+      type: 'food',
+      nationality: recipeDetails.strArea,
+      category: recipeDetails.strCategory,
+      alcoholicOrNot: '',
+      name: recipeDetails.strMeal,
+      image: recipeDetails.strMealThumb,
+      doneDate: today.toLocaleDateString('pt-br'),
+      tags: recipeDetails.strTags,
+    };
+    if (storage) {
+      localStorage.setItem('doneRecipes', JSON.stringify([...storage, doneRecipe]));
+    } else {
+      localStorage.setItem('doneRecipes', JSON.stringify([doneRecipe]));
+    }
+  };
 
   return (
     <div>
@@ -90,13 +116,15 @@ function FoodRecipe() {
         />
       </div>
       <Carousel />
-      <button
-        type="button"
-        data-testid="start-recipe-btn"
-        className="start-recipe-btn"
-      >
-        Start
-      </button>
+      {isVisible && (
+        <button
+          className="start-recipe-btn"
+          type="button"
+          data-testid="start-recipe-btn"
+          onClick={ handleClick }
+        >
+          Start
+        </button>)}
     </div>
   );
 }

@@ -10,6 +10,11 @@ function DrinkRecipe() {
   const [recipeDetails, setRecipeDetails] = useState({});
   const [ingredients, setIngredients] = useState([]);
 
+  const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
+  const isVisible = doneRecipes ? !doneRecipes
+    .some(({ id }) => id === recipeDetails.idDrink)
+    : true;
+
   useEffect(() => {
     const fetchAPI = async () => {
       const details = await fetchDrinkDetails(recipeId);
@@ -33,6 +38,28 @@ function DrinkRecipe() {
     };
     fetchAPI();
   }, []);
+
+  const handleClick = () => {
+    console.log('oi');
+    const storage = JSON.parse(localStorage.getItem('doneRecipes'));
+    const today = new Date();
+    const doneRecipe = {
+      id: recipeDetails.idDrink,
+      type: 'drink',
+      nationality: recipeDetails.strArea,
+      category: recipeDetails.strCategory,
+      alcoholicOrNot: recipeDetails.strAlcoholic,
+      name: recipeDetails.strDrink,
+      image: recipeDetails.strDrinkThumb,
+      doneDate: today.toLocaleDateString('pt-br'),
+      tags: recipeDetails.strTags,
+    };
+    if (storage) {
+      localStorage.setItem('doneRecipes', JSON.stringify([...storage, doneRecipe]));
+    } else {
+      localStorage.setItem('doneRecipes', JSON.stringify([doneRecipe]));
+    }
+  };
 
   return (
     <div>
@@ -75,13 +102,15 @@ function DrinkRecipe() {
         {recipeDetails.strInstructions}
       </p>
       <Carousel />
-      <button
-        className="start-recipe-btn"
-        type="button"
-        data-testid="start-recipe-btn"
-      >
-        Start
-      </button>
+      {isVisible && (
+        <button
+          className="start-recipe-btn"
+          type="button"
+          data-testid="start-recipe-btn"
+          onClick={ handleClick }
+        >
+          Start
+        </button>)}
     </div>
   );
 }
