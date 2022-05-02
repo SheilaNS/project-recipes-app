@@ -2,10 +2,33 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import '../assets/FoodRecipe.css';
 import Carousel from '../components/Carousel';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import { fetchFoodDetails } from '../services/fetchFoods';
 
 const copy = require('clipboard-copy');
+
+const doneRecipes = (recipeDetails) => {
+  const recipes = JSON.parse(localStorage.getItem('doneRecipes'));
+  return recipes ? !recipes
+    .some(({ id }) => id === recipeDetails.idMeal)
+    : true;
+};
+
+const inProgressRecipes = (recipeDetails) => {
+  const recipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  return recipes ? Object.keys(recipes.meals)
+    .some((key) => key === recipeDetails.idMeal)
+    : false;
+};
+
+const favoriteRecipes = (recipeDetails) => {
+  const recipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+  return recipes ? recipes
+    .some(({ id }) => id === recipeDetails.idMeal)
+    : false;
+};
 
 function FoodRecipe() {
   const location = useLocation();
@@ -16,14 +39,11 @@ function FoodRecipe() {
   const [video, setVideo] = useState('');
   const [isCopied, setIsCopied] = useState(false);
 
-  const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
-  const isVisible = doneRecipes ? !doneRecipes
-    .some(({ id }) => id === recipeDetails.idMeal)
-    : true;
-  const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
-  const isInProgress = inProgressRecipes ? Object.keys(inProgressRecipes.meals)
-    .some((key) => key === recipeDetails.idMeal)
-    : false;
+  const isVisible = doneRecipes(recipeDetails);
+
+  const isInProgress = inProgressRecipes(recipeDetails);
+
+  const isFavorite = favoriteRecipes(recipeDetails);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -78,6 +98,9 @@ function FoodRecipe() {
     setIsCopied(true);
   };
 
+  const handleFavorite = () => {
+  };
+
   return (
     <div>
       <img
@@ -98,8 +121,16 @@ function FoodRecipe() {
       <button
         type="button"
         data-testid="favorite-btn"
+        onClick={ handleFavorite }
+        src={
+          isFavorite
+            ? blackHeartIcon
+            : whiteHeartIcon
+        }
       >
-        Favorite
+        {isFavorite
+          ? <img src={ blackHeartIcon } alt="black heart" />
+          : <img src={ whiteHeartIcon } alt="white heart" />}
       </button>
       <p
         data-testid="recipe-category"
