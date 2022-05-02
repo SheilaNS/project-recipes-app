@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import '../assets/FoodRecipe.css';
 import Carousel from '../components/Carousel';
 import { fetchFoodDetails } from '../services/fetchFoods';
@@ -10,6 +10,7 @@ function FoodRecipe() {
   const [recipeDetails, setRecipeDetails] = useState({});
   const [ingredients, setIngredients] = useState([]);
   const [video, setVideo] = useState('');
+  const history = useHistory();
 
   const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
   const isVisible = doneRecipes ? !doneRecipes
@@ -47,24 +48,25 @@ function FoodRecipe() {
   }, []);
 
   const handleClick = () => {
-    const storage = JSON.parse(localStorage.getItem('doneRecipes'));
-    const today = new Date();
-    const doneRecipe = {
-      id: recipeDetails.idMeal,
-      type: 'food',
-      nationality: recipeDetails.strArea,
-      category: recipeDetails.strCategory,
-      alcoholicOrNot: '',
-      name: recipeDetails.strMeal,
-      image: recipeDetails.strMealThumb,
-      doneDate: today.toLocaleDateString('pt-br'),
-      tags: recipeDetails.strTags,
-    };
-    if (storage) {
-      localStorage.setItem('doneRecipes', JSON.stringify([...storage, doneRecipe]));
-    } else {
-      localStorage.setItem('doneRecipes', JSON.stringify([doneRecipe]));
-    }
+    // const storage = JSON.parse(localStorage.getItem('doneRecipes'));
+    // const today = new Date();
+    // const doneRecipe = {
+    //   id: recipeDetails.idMeal,
+    //   type: 'food',
+    //   nationality: recipeDetails.strArea,
+    //   category: recipeDetails.strCategory,
+    //   alcoholicOrNot: '',
+    //   name: recipeDetails.strMeal,
+    //   image: recipeDetails.strMealThumb,
+    //   doneDate: today.toLocaleDateString('pt-br'),
+    //   tags: recipeDetails.strTags,
+    // };
+    // if (storage) {
+    //   localStorage.setItem('doneRecipes', JSON.stringify([...storage, doneRecipe]));
+    // } else {
+    //   localStorage.setItem('doneRecipes', JSON.stringify([doneRecipe]));
+    // }
+    history.push(`/foods/${recipeDetails.idMeal}/in-progress`);
   };
 
   return (
