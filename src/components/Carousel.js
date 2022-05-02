@@ -1,87 +1,66 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
 import AppContext from '../context/AppContext';
-import CarouselCards from './CarouselCards';
 
 function Carousel() {
-  const { meals, drinks } = useContext(AppContext);
   const location = useLocation();
-  const path = location.pathname.split('/')[0];
+  const path = location.pathname.split('/')[1];
+  const { meals, drinks } = useContext(AppContext);
+
+  const history = useHistory();
 
   const [content, setContent] = useState([]);
+  const [currPage, setCurrPage] = useState(path === 'foods' ? 'Meal' : 'Drink');
+
   useEffect(() => {
-    const arr = path === 'foods' ? meals : drinks;
-    setContent(arr);
-  }, []);
+    setContent(path !== 'foods' ? meals : drinks);
+    setCurrPage(path !== 'foods' ? 'Meal' : 'Drink');
+  }, [meals, drinks, location]);
+
+  const settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 2,
+    slidesToScroll: 2,
+  };
+
+  const maxRecipes = 6;
+
+  const handleClick = () => {
+    const recipeKey = `id${currPage}`;
+
+    history.push(`${path}/${recipe[recipeKey]}`);
+  };
+
   return (
-    <div
-      id="multi-item-example"
-      className="carousel slide carousel-multi-item"
-      data-ride="carousel"
-    >
-
-      {/* <!--Controls--> */}
-      <div className="controls-top">
-        <a
-          className="btn-floating"
-          href="#multi-item-example"
-          data-slide="prev"
-        >
-          <i className="fa fa-chevron-left" />
-        </a>
-        <a className="btn-floating" href="#multi-item-example" data-slide="next">
-          <i className="fa fa-chevron-right" />
-        </a>
-      </div>
-      {/* <!--/.Controls--> */}
-
-      {/* <!--Indicators--> */}
-      <ol className="carousel-indicators">
-        <li data-target="#multi-item-example" data-slide-to="0" className="active" />
-        <li data-target="#multi-item-example" data-slide-to="1" />
-        <li data-target="#multi-item-example" data-slide-to="2" />
-      </ol>
-      {/* <!--/.Indicators--> */}
-
-      {/* <!--Slides--> */}
-      <div className="carousel-inner" role="listbox">
-
-        {/* <!--First slide--> */}
-        <div className="carousel-item active">
-
-          <div className="row">
-            <CarouselCards recipe={ content[0] } index={ 0 } />
-            <CarouselCards recipe={ content[1] } index={ 1 } />
-          </div>
-
-        </div>
-        {/* <!--/.First slide--> */}
-
-        {/* <!--Second slide--> */}
-        <div className="carousel-item">
-
-          <div className="row">
-            <CarouselCards recipe={ content[2] } index={ 2 } />
-            <CarouselCards recipe={ content[3] } index={ 3 } />
-          </div>
-
-        </div>
-        {/* <!--/.Second slide--> */}
-
-        {/* <!--Third slide--> */}
-        <div className="carousel-item">
-
-          <div className="row">
-            <CarouselCards recipe={ content[4] } index={ 4 } />
-            <CarouselCards recipe={ content[5] } index={ 5 } />
-          </div>
-        </div>
-        {/* <!--/.Third slide--> */}
-
-      </div>
-      {/* <!--/.Slides--> */}
-
-    </div>
+    <>
+      <h2>Recommended Recipes</h2>
+      <Slider { ...settings }>
+        {content.filter((_curr, index) => index < maxRecipes)
+          .map((recipe, index) => (
+            <button
+              type="button"
+              data-testid={ `${index}-recomendation-card` }
+              onClick={ handleClick }
+              key={ index }
+            >
+              <img
+                className="carousel-img card-img-top"
+                data-testid={ `${index}-carousel-img` }
+                src={ recipe[`str${currPage}Thumb`] }
+                alt={ recipe[`str${currPage}`] }
+              />
+              <h3 data-testid={ `${index}-recomendation-title` } className="card-title">
+                {recipe[`str${currPage}`]}
+              </h3>
+            </button>
+          ))}
+      </Slider>
+    </>
   );
 }
 

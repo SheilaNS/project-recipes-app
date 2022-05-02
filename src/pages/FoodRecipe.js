@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import Carousel from '../components/Carousel';
 import { fetchFoodDetails } from '../services/fetchFoods';
 
 function FoodRecipe() {
@@ -87,11 +88,7 @@ function FoodRecipe() {
           title="Embedded youtube"
         />
       </div>
-      <div
-        data-testid={ `${0}-recomendation-card` }
-      >
-        Card Recommended
-      </div>
+      <Carousel />
       <button
         type="button"
         data-testid="start-recipe-btn"

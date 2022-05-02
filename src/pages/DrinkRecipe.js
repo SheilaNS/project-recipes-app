@@ -65,7 +65,7 @@ function DrinkRecipe() {
           data-testid={ `${index}-ingredient-name-and-measure` }
           key={ ingredient }
         >
-          {`${measure} ${ingredient}`}
+          {`${measure === null ? '' : measure} ${ingredient}`}
         </p>
       ))}
       <p
