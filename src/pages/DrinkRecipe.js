@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import Carousel from '../components/Carousel';
 import { fetchDrinkDetails } from '../services/fetchDrinks';
 
 function DrinkRecipe() {
@@ -72,11 +73,7 @@ function DrinkRecipe() {
       >
         {recipeDetails.strInstructions}
       </p>
-      <div
-        data-testid={ `${0}-recomendation-card` }
-      >
-        Card Recommended
-      </div>
+      <Carousel />
       <button
         type="button"
         data-testid="start-recipe-btn"
