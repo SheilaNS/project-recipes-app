@@ -14,6 +14,10 @@ function DrinkRecipe() {
   const isVisible = doneRecipes ? !doneRecipes
     .some(({ id }) => id === recipeDetails.idDrink)
     : true;
+  const inProgressRecipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  const isInProgress = inProgressRecipes ? Object.keys(inProgressRecipes.cocktails)
+    .some((key) => key === recipeDetails.idDrink)
+    : false;
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -109,7 +113,7 @@ function DrinkRecipe() {
           data-testid="start-recipe-btn"
           onClick={ handleClick }
         >
-          Start
+          {isInProgress ? 'Continue Recipe' : 'Start'}
         </button>)}
     </div>
   );
