@@ -2,15 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import '../assets/FoodRecipe.css';
 import Carousel from '../components/Carousel';
+import shareIcon from '../images/shareIcon.svg';
 import { fetchFoodDetails } from '../services/fetchFoods';
+
+const copy = require('clipboard-copy');
 
 function FoodRecipe() {
   const location = useLocation();
   const recipeId = location.pathname.split('/')[2];
+  const history = useHistory();
   const [recipeDetails, setRecipeDetails] = useState({});
   const [ingredients, setIngredients] = useState([]);
   const [video, setVideo] = useState('');
-  const history = useHistory();
+  const [isCopied, setIsCopied] = useState(false);
 
   const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
   const isVisible = doneRecipes ? !doneRecipes
@@ -69,6 +73,11 @@ function FoodRecipe() {
     history.push(`/foods/${recipeDetails.idMeal}/in-progress`);
   };
 
+  const handleCopy = () => {
+    copy(`http://localhost:3000${location.pathname}`);
+    setIsCopied(true);
+  };
+
   return (
     <div>
       <img
@@ -82,8 +91,9 @@ function FoodRecipe() {
       <button
         type="button"
         data-testid="share-btn"
+        onClick={ handleCopy }
       >
-        Share
+        {isCopied ? 'Link copied!' : <img src={ shareIcon } alt="share icon" />}
       </button>
       <button
         type="button"
