@@ -20,6 +20,15 @@ function DoneRecipes() {
     setRenderRecipes(doneRecipes);
   }, []);
 
+  const handleFilter = ({ currentTarget: { name } }) => {
+    if (name === 'all') {
+      setRenderRecipes(doneRecipes);
+    } else {
+      const newRender = renderRecipes.filter(({ type }) => type === name);
+      setRenderRecipes(newRender);
+    }
+  };
+
   return (
     <>
       <Header title="Done Recipes" searchOn={ false } />
@@ -27,18 +36,24 @@ function DoneRecipes() {
         <button
           type="button"
           data-testid="filter-by-all-btn"
+          name="all"
+          onClick={ handleFilter }
         >
           All
         </button>
         <button
           type="button"
           data-testid="filter-by-food-btn"
+          name="food"
+          onClick={ handleFilter }
         >
           Food
         </button>
         <button
           type="button"
           data-testid="filter-by-drink-btn"
+          name="drink"
+          onClick={ handleFilter }
         >
           Drinks
         </button>
