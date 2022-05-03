@@ -30,6 +30,30 @@ const favoriteRecipes = (recipeDetails) => {
     : false;
 };
 
+const toggleFavorite = (recipeDetails) => {
+  const storage = JSON.parse(localStorage.getItem('favoriteRecipes'));
+  const newFavorite = {
+    id: recipeDetails.idMeal,
+    type: 'food',
+    nationality: recipeDetails.strArea,
+    category: recipeDetails.strCategory,
+    alcoholicOrNot: '',
+    name: recipeDetails.strMeal,
+    image: recipeDetails.strMealThumb,
+  };
+  if (storage) {
+    if (favoriteRecipes(recipeDetails)) {
+      const filteredStorage = storage.filter(({ id }) => id !== recipeDetails.idMeal);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(filteredStorage));
+    } else {
+      localStorage.setItem('favoriteRecipes', JSON
+        .stringify([...storage, newFavorite]));
+    }
+  } else {
+    localStorage.setItem('favoriteRecipes', JSON.stringify([newFavorite]));
+  }
+};
+
 function FoodRecipe() {
   const location = useLocation();
   const recipeId = location.pathname.split('/')[2];
@@ -38,12 +62,12 @@ function FoodRecipe() {
   const [ingredients, setIngredients] = useState([]);
   const [video, setVideo] = useState('');
   const [isCopied, setIsCopied] = useState(false);
+  const loadFavorite = favoriteRecipes(recipeDetails);
+  const [isFavorite, setIsFavorite] = useState(loadFavorite);
 
   const isVisible = doneRecipes(recipeDetails);
 
   const isInProgress = inProgressRecipes(recipeDetails);
-
-  const isFavorite = favoriteRecipes(recipeDetails);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -70,6 +94,11 @@ function FoodRecipe() {
     };
     fetchAPI();
   }, []);
+
+  useEffect(() => {
+    const favorite = favoriteRecipes(recipeDetails);
+    setIsFavorite(favorite);
+  }, [recipeDetails]);
 
   const handleClick = () => {
     // const storage = JSON.parse(localStorage.getItem('doneRecipes'));
@@ -99,6 +128,9 @@ function FoodRecipe() {
   };
 
   const handleFavorite = () => {
+    toggleFavorite(recipeDetails);
+    const favorite = favoriteRecipes(recipeDetails);
+    setIsFavorite(favorite);
   };
 
   return (

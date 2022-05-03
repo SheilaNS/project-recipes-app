@@ -25,9 +25,34 @@ const inProgressRecipes = (recipeDetails) => {
 
 const favoriteRecipes = (recipeDetails) => {
   const recipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+  console.log(recipes, recipeDetails);
   return recipes ? recipes
     .some(({ id }) => id === recipeDetails.idDrink)
     : false;
+};
+
+const toggleFavorite = (recipeDetails) => {
+  const storage = JSON.parse(localStorage.getItem('favoriteRecipes'));
+  const newFavorite = {
+    id: recipeDetails.idDrink,
+    type: 'drink',
+    nationality: '',
+    category: recipeDetails.strCategory,
+    alcoholicOrNot: recipeDetails.strAlcoholic,
+    name: recipeDetails.strDrink,
+    image: recipeDetails.strDrinkThumb,
+  };
+  if (storage) {
+    if (favoriteRecipes(recipeDetails)) {
+      const filteredStorage = storage.filter(({ id }) => id !== recipeDetails.idDrink);
+      localStorage.setItem('favoriteRecipes', JSON.stringify(filteredStorage));
+    } else {
+      localStorage.setItem('favoriteRecipes', JSON
+        .stringify([...storage, newFavorite]));
+    }
+  } else {
+    localStorage.setItem('favoriteRecipes', JSON.stringify([newFavorite]));
+  }
 };
 
 function DrinkRecipe() {
@@ -37,12 +62,12 @@ function DrinkRecipe() {
   const [recipeDetails, setRecipeDetails] = useState({});
   const [ingredients, setIngredients] = useState([]);
   const [isCopied, setIsCopied] = useState(false);
+  const loadFavorite = favoriteRecipes(recipeDetails);
+  const [isFavorite, setIsFavorite] = useState(loadFavorite);
 
   const isVisible = doneRecipes(recipeDetails);
 
   const isInProgress = inProgressRecipes(recipeDetails);
-
-  const isFavorite = favoriteRecipes(recipeDetails);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -54,6 +79,7 @@ function DrinkRecipe() {
         }
         return acc;
       }, []);
+      console.log(isFavorite);
       const newIngredients = keys.reduce((acc, curr, index) => {
         if (details[curr] != null) {
           acc = [...acc, {
@@ -68,8 +94,12 @@ function DrinkRecipe() {
     fetchAPI();
   }, []);
 
+  useEffect(() => {
+    const favorite = favoriteRecipes(recipeDetails);
+    setIsFavorite(favorite);
+  }, [recipeDetails]);
+
   const handleClick = () => {
-    // console.log('oi');
     // const storage = JSON.parse(localStorage.getItem('doneRecipes'));
     // const today = new Date();
     // const doneRecipe = {
@@ -97,6 +127,9 @@ function DrinkRecipe() {
   };
 
   const handleFavorite = () => {
+    toggleFavorite(recipeDetails);
+    const favorite = favoriteRecipes(recipeDetails);
+    setIsFavorite(favorite);
   };
 
   return (
