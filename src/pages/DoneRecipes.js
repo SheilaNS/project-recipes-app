@@ -50,7 +50,9 @@ function DoneRecipes() {
             alt="recipe thumb"
           />
           <p data-testid={ `${index}-horizontal-top-text` }>
-            {`${recipe.nationality} - ${recipe.category}`}
+            {recipe.type === 'food'
+              ? `${recipe.nationality} - ${recipe.category}`
+              : recipe.alcoholicOrNot}
           </p>
           <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
           <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
