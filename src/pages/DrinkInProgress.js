@@ -100,7 +100,7 @@ function DrinkInProgress() {
         }
         return acc;
       }, []);
-      setIngredients(newIngredients);
+      setIngredients(newIngredients.filter(({ ingredient }) => ingredient.length !== 0));
     };
     fetchAPI();
   }, []);
@@ -199,7 +199,7 @@ function DrinkInProgress() {
       >
         {`${recipeDetails.strCategory} ${recipeDetails.strAlcoholic}`}
       </p>
-      {ingredients.filter(({ ingredient }) => ingredient.length !== 0)
+      {ingredients
         .map(({ ingredient, measure }, index) => (
           <label
             htmlFor={ `${index}-ingredient-step` }
@@ -231,6 +231,7 @@ function DrinkInProgress() {
         type="button"
         data-testid="finish-recipe-btn"
         onClick={ handleClick }
+        disabled={ ingredients.length !== usedIngredients.length }
       >
         Finish Recipe
       </button>

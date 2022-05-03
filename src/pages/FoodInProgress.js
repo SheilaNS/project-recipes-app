@@ -103,7 +103,7 @@ function FoodInProgress() {
         }
         return acc;
       }, []);
-      setIngredients(newIngredients);
+      setIngredients(newIngredients.filter(({ ingredient }) => ingredient.length !== 0));
       const videoKey = details.strYoutube.split('=')[1];
       setVideo(videoKey);
     };
@@ -201,7 +201,7 @@ function FoodInProgress() {
       <p data-testid="recipe-category">
         {recipeDetails.strCategory}
       </p>
-      {ingredients.filter(({ ingredient }) => ingredient.length !== 0)
+      {ingredients
         .map(({ ingredient, measure }, index) => (
           <label
             htmlFor={ `${index}-ingredient-step` }
@@ -229,6 +229,7 @@ function FoodInProgress() {
         type="button"
         data-testid="finish-recipe-btn"
         onClick={ handleClick }
+        disabled={ ingredients.length !== usedIngredients.length }
       >
         Finish Recipe
       </button>
