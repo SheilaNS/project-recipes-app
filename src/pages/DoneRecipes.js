@@ -9,7 +9,7 @@ function DoneRecipes() {
   const doneRecipes = JSON.parse(localStorage.getItem('doneRecipes'));
 
   const [isCopied, setIsCopied] = useState(false);
-  const [renderRecipes, setRenderRecipes] = useState(doneRecipes);
+  const [renderRecipes, setRenderRecipes] = useState([]);
 
   const handleCopy = ({ currentTarget: { name, id } }) => {
     console.log(name, id);
@@ -59,7 +59,7 @@ function DoneRecipes() {
           Drinks
         </button>
       </div>
-      {renderRecipes.map((recipe, index) => (
+      {renderRecipes && renderRecipes.map((recipe, index) => (
         <div key={ recipe.id }>
           <Link to={ `${recipe.type}s/${recipe.id}` }>
             <img
