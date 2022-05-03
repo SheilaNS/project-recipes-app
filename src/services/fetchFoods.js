@@ -22,3 +22,10 @@ export const fetchFoodByCat = async (value) => {
   const data = await results.json();
   return data.meals;
 };
+
+export const fetchFoodDetails = async (id) => {
+  const URL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
+  const results = await fetch(URL);
+  const data = await results.json();
+  return data.meals[0];
+};
