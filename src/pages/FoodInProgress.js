@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import '../assets/FoodRecipe.css';
 import Carousel from '../components/Carousel';
+import Video from '../components/Video';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
@@ -9,18 +10,20 @@ import { fetchFoodDetails } from '../services/fetchFoods';
 
 const copy = require('clipboard-copy');
 
-const doneRecipes = (recipeDetails) => {
-  const recipes = JSON.parse(localStorage.getItem('doneRecipes'));
-  return recipes ? !recipes
-    .some(({ id }) => id === recipeDetails.idMeal)
-    : true;
-};
-
 const favoriteRecipes = (recipeDetails) => {
   const recipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
   return recipes ? recipes
     .some(({ id }) => id === recipeDetails.idMeal)
     : false;
+};
+
+const inProgressRecipes = (recipeDetails) => {
+  const recipes = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  const isInProgress = recipes ? Object.keys(recipes.meals)
+    .some((key) => key === recipeDetails.idMeal)
+    : false;
+  if (isInProgress) return recipes.meals[recipeDetails.idMeal];
+  return [];
 };
 
 const toggleFavorite = (recipeDetails) => {
@@ -47,6 +50,28 @@ const toggleFavorite = (recipeDetails) => {
   }
 };
 
+const checkLocalStorage = (recipeDetails, value, localUsed, usedIngredients) => {
+  if (localUsed) {
+    const { meals } = localUsed;
+    localStorage.setItem('inProgressRecipes', JSON.stringify({
+      ...localUsed,
+      meals: {
+        ...meals, [recipeDetails.idMeal]: [...usedIngredients, value],
+      } }));
+  } else {
+    localStorage.setItem('inProgressRecipes', JSON.stringify({
+      meals: {
+        [recipeDetails.idMeal]: [...usedIngredients, value],
+      },
+      cocktails: {},
+    }));
+  }
+};
+
+const renderImg = (isFavorite) => (isFavorite
+  ? <img src={ blackHeartIcon } alt="black heart" />
+  : <img src={ whiteHeartIcon } alt="white heart" />);
+
 function FoodInProgress() {
   const location = useLocation();
   const recipeId = location.pathname.split('/')[2];
@@ -57,8 +82,7 @@ function FoodInProgress() {
   const [isCopied, setIsCopied] = useState(false);
   const loadFavorite = favoriteRecipes(recipeDetails);
   const [isFavorite, setIsFavorite] = useState(loadFavorite);
-
-  const isVisible = doneRecipes(recipeDetails);
+  const [usedIngredients, setUsedIngredients] = useState([]);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -91,6 +115,11 @@ function FoodInProgress() {
     setIsFavorite(favorite);
   }, [recipeDetails]);
 
+  useEffect(() => {
+    const savedIngredients = inProgressRecipes(recipeDetails);
+    setUsedIngredients([...savedIngredients]);
+  }, [recipeDetails]);
+
   const handleClick = () => {
     // const storage = JSON.parse(localStorage.getItem('doneRecipes'));
     // const today = new Date();
@@ -114,7 +143,7 @@ function FoodInProgress() {
   };
 
   const handleCopy = () => {
-    copy(`http://localhost:3000${location.pathname}`);
+    copy(`http://localhost:3000/foods/${recipeDetails.idMeal}`);
     setIsCopied(true);
   };
 
@@ -124,14 +153,21 @@ function FoodInProgress() {
     setIsFavorite(favorite);
   };
 
-  // data-testid="recipe-photo"
-  // data-testid="recipe-title"
-  // data-testid="share-btn"
-  // data-testid="favorite-btn"
-  // data-testid="recipe-category"
-  // data-testid=${index}-ingredient-step
-  // data-testid="instructions"
-  // data-testid="finish-recipe-btn"
+  const handleChange = ({ target: { value, checked } }) => {
+    const localUsed = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    if (checked) {
+      setUsedIngredients([...usedIngredients, value]);
+      checkLocalStorage(recipeDetails, value, localUsed, usedIngredients);
+    } else {
+      const newUsed = usedIngredients.filter((ingredient) => ingredient !== value);
+      const { meals } = localUsed;
+      setUsedIngredients(newUsed);
+      localStorage
+        .setItem('inProgressRecipes', JSON.stringify({
+          ...localUsed, meals: { ...meals, [recipeDetails.idMeal]: newUsed },
+        }));
+    }
+  };
 
   return (
     <div>
@@ -160,13 +196,9 @@ function FoodInProgress() {
             : whiteHeartIcon
         }
       >
-        {isFavorite
-          ? <img src={ blackHeartIcon } alt="black heart" />
-          : <img src={ whiteHeartIcon } alt="white heart" />}
+        {renderImg(isFavorite)}
       </button>
-      <p
-        data-testid="recipe-category"
-      >
+      <p data-testid="recipe-category">
         {recipeDetails.strCategory}
       </p>
       {ingredients.filter(({ ingredient }) => ingredient.length !== 0)
@@ -176,39 +208,30 @@ function FoodInProgress() {
             key={ ingredient }
             data-testid={ `${index}-ingredient-step` }
           >
-            <input type="checkbox" id={ `${index}-ingredient-step` } />
-            <p>
-              {`${measure === null ? '' : measure} ${ingredient}`}
-            </p>
+            <input
+              type="checkbox"
+              id={ `${index}-ingredient-step` }
+              value={ `${measure} ${ingredient}` }
+              checked={ usedIngredients ? usedIngredients
+                .includes(`${measure} ${ingredient}`) : false }
+              onChange={ handleChange }
+            />
+            <p>{`${measure} ${ingredient}`}</p>
           </label>
         ))}
-      <p
-        data-testid="instructions"
-      >
+      <p data-testid="instructions">
         {recipeDetails.strInstructions}
       </p>
-      <div className="video-responsive">
-        <iframe
-          width="560"
-          height="315"
-          data-testid="video"
-          src={ `https://www.youtube.com/embed/${video}` }
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media;"
-          allowFullScreen
-          title="Embedded youtube"
-        />
-      </div>
+      <Video video={ video } />
       <Carousel />
-      {isVisible && (
-        <button
-          className="finish-recipe-btn"
-          type="button"
-          data-testid="finish-recipe-btn"
-          onClick={ handleClick }
-        >
-          Finish Recipe
-        </button>)}
+      <button
+        className="finish-recipe-btn"
+        type="button"
+        data-testid="finish-recipe-btn"
+        onClick={ handleClick }
+      >
+        Finish Recipe
+      </button>
     </div>
   );
 }
