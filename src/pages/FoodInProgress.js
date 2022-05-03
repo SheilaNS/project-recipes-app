@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import '../assets/FoodRecipe.css';
-import Carousel from '../components/Carousel';
 import Video from '../components/Video';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
@@ -139,7 +138,7 @@ function FoodInProgress() {
     // } else {
     //   localStorage.setItem('doneRecipes', JSON.stringify([doneRecipe]));
     // }
-    history.push(`/foods/${recipeDetails.idMeal}/in-progress`);
+    history.push('/done-recipes');
   };
 
   const handleCopy = () => {
@@ -223,7 +222,6 @@ function FoodInProgress() {
         {recipeDetails.strInstructions}
       </p>
       <Video video={ video } />
-      <Carousel />
       <button
         className="finish-recipe-btn"
         type="button"

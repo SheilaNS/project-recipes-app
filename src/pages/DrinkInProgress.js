@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import '../assets/DrinkRecipe.css';
-import Carousel from '../components/Carousel';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
@@ -134,7 +133,7 @@ function DrinkInProgress() {
     // } else {
     //   localStorage.setItem('doneRecipes', JSON.stringify([doneRecipe]));
     // }
-    history.push(`/drinks/${recipeDetails.idDrink}/in-progress`);
+    history.push('/done-recipes');
   };
 
   const handleCopy = () => {
@@ -224,8 +223,6 @@ function DrinkInProgress() {
       >
         {recipeDetails.strInstructions}
       </p>
-      <Carousel />
-
       <button
         className="finish-recipe-btn"
         type="button"
