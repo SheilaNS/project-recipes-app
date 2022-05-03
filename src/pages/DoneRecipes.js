@@ -10,8 +10,9 @@ function DoneRecipes() {
   const [isCopied, setIsCopied] = useState(false);
   const [renderRecipes, setRenderRecipes] = useState(doneRecipes);
 
-  const handleCopy = () => {
-    copy(`http://localhost:3000/foods/${recipeDetails.idMeal}`);
+  const handleCopy = ({ currentTarget: { name, id } }) => {
+    console.log(name, id);
+    copy(`http://localhost:3000/${name}s/${id}`);
     setIsCopied(true);
   };
 
@@ -59,7 +60,8 @@ function DoneRecipes() {
           <button
             type="button"
             data-testid={ `${index}-horizontal-share-btn` }
-            name={ recipe.id }
+            name={ recipe.type }
+            id={ recipe.id }
             onClick={ handleCopy }
             src={ shareIcon }
           >
