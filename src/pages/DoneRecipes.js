@@ -46,10 +46,12 @@ function DoneRecipes() {
         <div key={ recipe.id }>
           <img
             data-testid={ `${index}-horizontal-image` }
-            src=""
+            src={ recipe.image }
             alt="recipe thumb"
           />
-          <p data-testid={ `${index}-horizontal-top-text` }>{recipe.category}</p>
+          <p data-testid={ `${index}-horizontal-top-text` }>
+            {`${recipe.nationality} - ${recipe.category}`}
+          </p>
           <p data-testid={ `${index}-horizontal-name` }>{recipe.name}</p>
           <p data-testid={ `${index}-horizontal-done-date` }>{recipe.doneDate}</p>
           <button
@@ -57,6 +59,7 @@ function DoneRecipes() {
             data-testid={ `${index}-horizontal-share-btn` }
             name={ recipe.id }
             onClick={ handleCopy }
+            src={ shareIcon }
           >
             {isCopied ? 'Link copied!' : <img src={ shareIcon } alt="share icon" />}
           </button>
