@@ -4,7 +4,7 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 function ExploreDrinks() {
-  const history = useHistory();
+  const history = useHistory( );
 
   const [randomDrinkURL, randomDrinkData] = useState();
 
