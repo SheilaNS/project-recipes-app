@@ -1,20 +1,29 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import AppContext from '../context/AppContext';
 import Cards from '../components/Cards';
+import { fetchNationalityFood } from '../services/fetchFoods';
+import AppContext from '../context/AppContext';
 
 function Nationalities() {
   const { meals } = useContext(AppContext);
-  console.log(meals);
+  const [nationalityData, setNationalityData] = useState([]);
+
+  useEffect(() => {
+    const fetchNationality = async () => {
+      const data = await fetchNationalityFood();
+      setNationalityData(data.meals);
+    };
+    fetchNationality();
+  });
 
   return (
     <>
       <Header title="Explore Nationalities" searchOn />
       <select data-testid="explore-by-nationality-dropdown">
         <option>All</option>
-        {meals
+        {nationalityData
           .reduce((acc, { strArea }) => {
             if (!acc.includes(strArea)) acc = [...acc, strArea];
             return acc;
