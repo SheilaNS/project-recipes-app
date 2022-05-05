@@ -29,3 +29,9 @@ export const fetchFoodDetails = async (id) => {
   const data = await results.json();
   return data.meals[0];
 };
+
+export const fetchIngredientsList = async () => {
+  const results = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?i=list');
+  const data = await results.json();
+  return data.meals;
+};
