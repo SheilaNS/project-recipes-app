@@ -54,7 +54,6 @@ function AppProvider({ children }) {
       if (category !== '') {
         if (page === '/foods') {
           const newData = await fetchFoodByCat(category);
-          console.log(newData);
           setMeals(newData);
         } else {
           const newData = await fetchDrinkByCat(category);

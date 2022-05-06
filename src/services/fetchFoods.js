@@ -40,3 +40,9 @@ export const fetchNationalityFood = async () => {
     return error;
   }
 };
+
+export const fetchIngredientsList = async () => {
+  const results = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?i=list');
+  const data = await results.json();
+  return data.meals;
+};
