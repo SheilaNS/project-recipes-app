@@ -16,6 +16,7 @@ import Foods from './pages/Foods';
 import Login from './pages/Login';
 import Nationalities from './pages/Nationalities';
 import Profile from './pages/Profile';
+import NotFound from './pages/NotFound';
 
 const Routes = () => (
   <Switch>
@@ -35,6 +36,7 @@ const Routes = () => (
     <Route component={ Profile } path="/profile" exact />
     <Route component={ DoneRecipes } path="/done-recipes" exact />
     <Route component={ Favorites } path="/favorite-recipes" exact />
+    <Route component={ NotFound } path="*" />
   </Switch>
 );
 
