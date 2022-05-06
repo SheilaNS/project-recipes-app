@@ -1,30 +1,50 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
 import Cards from '../components/Cards';
-import { fetchNationalityFood } from '../services/fetchFoods';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
 import AppContext from '../context/AppContext';
+import { fetchByNationality, fetchNationalities } from '../services/fetchFoods';
 
 function Nationalities() {
   const { meals } = useContext(AppContext);
+  const maxCards = 12;
+
+  const reducedMeals = meals.reduce((acc, curr, index) => {
+    if (index < maxCards) acc = [...acc, curr];
+    return acc;
+  }, []);
   const [nationalityData, setNationalityData] = useState([]);
   const [nationalityEvent, setNationalityEvent] = useState('');
-  // console.log(meals.filter((e) => (e.strArea === 'Turkish')));
+  const [nationalityMeals, setNationalityMeals] = useState(reducedMeals);
 
   useEffect(() => {
     const fetchNationality = async () => {
-      const data = await fetchNationalityFood();
+      const data = await fetchNationalities();
       setNationalityData(data.meals);
     };
     fetchNationality();
   });
 
+  useEffect(() => {
+    setNationalityMeals(reducedMeals);
+  }, []);
+
+  useEffect(() => {
+    const fetchNatMeals = async () => {
+      const data = await fetchByNationality(nationalityEvent);
+      if (data.length) {
+        const newMeals = data.filter((_element, index) => index < maxCards);
+        setNationalityMeals(newMeals);
+      }
+    };
+    fetchNatMeals();
+  }, [nationalityEvent]);
+
   const handleChange = ({ target: { value } }) => {
+    if (value === '') setNationalityMeals(reducedMeals);
     setNationalityEvent(value);
   };
-
-  // console.log(Object.values(nationalityEvent));
 
   return (
     <>
@@ -53,24 +73,19 @@ function Nationalities() {
               {nationality}
             </option>))}
       </select>
-      {meals.length && (
-        meals.filter((e) => (e.strArea.includes(nationalityEvent)))
-          // .reduce((acc, curr, index) => {
-          //   const maxCards = 12;
-          //   if (index < maxCards) acc = [...acc, curr];
-          //   return acc;
-          // }, [])
-          .map(({ strMeal, strMealThumb, idMeal }, index) => (
-            <Link
-              key={ index }
-              to={ `/foods/${idMeal}` }
-            >
-              <Cards
-                recipe={ { recipeName: strMeal, recipeImg: strMealThumb, index } }
-              />
-            </Link>
-          ))
-      )}
+      {(nationalityMeals.length > 0
+        ? nationalityMeals
+        : reducedMeals)
+        .map(({ strMeal, strMealThumb, idMeal }, index) => (
+          <Link
+            key={ index }
+            to={ `/foods/${idMeal}` }
+          >
+            <Cards
+              recipe={ { recipeName: strMeal, recipeImg: strMealThumb, index } }
+            />
+          </Link>
+        ))}
       <Footer />
     </>
   );

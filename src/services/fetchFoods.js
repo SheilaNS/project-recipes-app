@@ -30,7 +30,13 @@ export const fetchFoodDetails = async (id) => {
   return data.meals[0];
 };
 
-export const fetchNationalityFood = async () => {
+export const fetchIngredientsList = async () => {
+  const results = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?i=list');
+  const data = await results.json();
+  return data.meals;
+};
+
+export const fetchNationalities = async () => {
   try {
     const URL = 'https://www.themealdb.com/api/json/v1/1/list.php?a=list';
     const response = await fetch(URL);
@@ -41,8 +47,13 @@ export const fetchNationalityFood = async () => {
   }
 };
 
-export const fetchIngredientsList = async () => {
-  const results = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?i=list');
-  const data = await results.json();
-  return data.meals;
+export const fetchByNationality = async (nationality) => {
+  try {
+    const URL = `https://www.themealdb.com/api/json/v1/1/filter.php?a=${nationality}`;
+    const response = await fetch(URL);
+    const data = await response.json();
+    return data.meals;
+  } catch (error) {
+    return error;
+  }
 };
