@@ -3,14 +3,17 @@ import { createBrowserHistory } from 'history';
 import React from 'react';
 import { Router } from 'react-router-dom';
 import App from '../../App';
+import AppProvider from '../../context/AppProvider';
 
 export const renderPath = (path) => {
   const history = createBrowserHistory();
   history.push(path);
   const { ...resources } = render(
-    <Router history={ history }>
-      <App />
-    </Router>,
+    <AppProvider>
+      <Router history={ history }>
+        <App />
+      </Router>
+    </AppProvider>,
   );
   return { ...resources, history };
 };
