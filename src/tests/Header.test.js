@@ -20,7 +20,8 @@ describe('Menu Superior', () => {
     });
   it('Barra de busca não é exibida ao renderizar a página',
     () => {
-      expect(screen.getByTestId('search-input')).not.toBeInTheDocument();
+      const searchInput = screen.queryByTestId('search-input');
+      expect(searchInput).toBeNull();
     });
   it('Barra de busca é exibida ao clicar no ícone de busca',
     () => {
