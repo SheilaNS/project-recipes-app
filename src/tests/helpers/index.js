@@ -6,13 +6,14 @@ import { drinks } from '../../../cypress/mocks/drinks';
 import fetchRequest from '../../../cypress/mocks/fetch';
 import { meals } from '../../../cypress/mocks/meals';
 import App from '../../App';
+import AppContext from '../../context/AppContext';
 import AppProvider from '../../context/AppProvider';
 
 export const renderPath = (path) => {
   const history = createBrowserHistory();
   history.push(path);
   const { ...resources } = render(
-    <AppProvider>
+    <AppProvider value={ AppContext }>
       <Router history={ history }>
         <App />
       </Router>
