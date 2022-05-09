@@ -25,7 +25,6 @@ const inProgressRecipes = (recipeDetails) => {
 
 const favoriteRecipes = (recipeDetails) => {
   const recipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
-  console.log(recipes, recipeDetails);
   return recipes ? recipes
     .some(({ id }) => id === recipeDetails.idDrink)
     : false;
@@ -79,7 +78,6 @@ function DrinkRecipe() {
         }
         return acc;
       }, []);
-      console.log(isFavorite);
       const newIngredients = keys.reduce((acc, curr, index) => {
         if (details[curr] != null) {
           acc = [...acc, {

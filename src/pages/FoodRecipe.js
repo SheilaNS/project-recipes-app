@@ -101,24 +101,6 @@ function FoodRecipe() {
   }, [recipeDetails]);
 
   const handleClick = () => {
-    // const storage = JSON.parse(localStorage.getItem('doneRecipes'));
-    // const today = new Date();
-    // const doneRecipe = {
-    //   id: recipeDetails.idMeal,
-    //   type: 'food',
-    //   nationality: recipeDetails.strArea,
-    //   category: recipeDetails.strCategory,
-    //   alcoholicOrNot: '',
-    //   name: recipeDetails.strMeal,
-    //   image: recipeDetails.strMealThumb,
-    //   doneDate: today.toLocaleDateString('pt-br'),
-    //   tags: recipeDetails.strTags,
-    // };
-    // if (storage) {
-    //   localStorage.setItem('doneRecipes', JSON.stringify([...storage, doneRecipe]));
-    // } else {
-    //   localStorage.setItem('doneRecipes', JSON.stringify([doneRecipe]));
-    // }
     history.push(`/foods/${recipeDetails.idMeal}/in-progress`);
   };
 
