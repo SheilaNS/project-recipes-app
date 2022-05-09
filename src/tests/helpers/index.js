@@ -3,7 +3,6 @@ import { createBrowserHistory } from 'history';
 import React from 'react';
 import { Router } from 'react-router-dom';
 import { drinks } from '../../../cypress/mocks/drinks';
-import fetchRequest from '../../../cypress/mocks/fetch';
 import { meals } from '../../../cypress/mocks/meals';
 import App from '../../App';
 import AppContext from '../../context/AppContext';
@@ -19,18 +18,13 @@ export const renderPath = (path) => {
       </Router>
     </AppProvider>,
   );
-  return { ...resources, history };
+  return { ...resources, history, AppContext };
 };
 
 export const EMAIL_INPUT = 'email-input';
 export const PASSWORD_INPUT = 'password-input';
 export const LOGIN_BTN = 'login-submit-btn';
 export const DEF_EMAIL = 'user@user.com';
-
-export const mockFetch = () => {
-  jest.spyOn(global, 'fetch')
-    .mockImplementation((url) => fetchRequest(url));
-};
 
 const maxRec = 12;
 
