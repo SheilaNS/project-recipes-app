@@ -11,22 +11,22 @@ const befEachCallback = async () => {
 
 const path = '/explore';
 
-describe('Página de explorar', () => {
+describe('Explore page', () => {
   beforeEach(befEachCallback);
   afterEach(() => jest.clearAllMocks());
 
-  it('A tela de explorar possui todos os atributos',
+  it('The explore screen has all the attributes',
     async () => {
       renderPath(path);
       expect(screen.getByTestId('explore-foods')).toBeInTheDocument();
       expect(screen.getByTestId('explore-drinks')).toBeInTheDocument();
     });
-  it('Verifica se o clique no botão de Foods direciona para a tela correta', async () => {
+  it('Checks if clicking on the Foods button renders the correct screen', async () => {
     const { history } = renderPath(path);
     userEvent.click(screen.getByTestId('explore-foods'));
     expect(history.location.pathname).toBe('/explore/foods');
   });
-  it('Verifica se o clique no botão de Drinks direciona para tela correta', async () => {
+  it('Checks if clicking on the Drinks button renders the correct screen', async () => {
     const { history } = renderPath(path);
     userEvent.click(screen.getByTestId('explore-drinks'));
     expect(history.location.pathname).toBe('/explore/drinks');

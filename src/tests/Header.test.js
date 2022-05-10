@@ -2,28 +2,28 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderPath } from './helpers';
 
-describe('Menu Superior', () => {
+describe('Header', () => {
   beforeEach(() => {
     localStorage.clear();
     renderPath('/foods');
   });
-  it('Ao navegar para a rota /foods, o cabeçalho e botões especificados estão presentes',
+  it('When navigating to the /foods route, the specified header and buttons are present',
     () => {
       expect(screen.getByTestId('profile-top-btn')).toBeInTheDocument();
       expect(screen.getByTestId('page-title')).toBeInTheDocument();
       expect(screen.getByTestId('search-top-btn')).toBeInTheDocument();
     });
-  it('Redireciona para a página de perfil ao clicar no ícone de perfil',
+  it('Redirects to profile page when clicking profile icon',
     () => {
       userEvent.click(screen.getByTestId('profile-top-btn'));
       expect(window.location.pathname).toBe('/profile');
     });
-  it('Barra de busca não é exibida ao renderizar a página',
+  it('Search bar is not visible when the page is rendered',
     () => {
       const searchInput = screen.queryByTestId('search-input');
       expect(searchInput).toBeNull();
     });
-  it('Barra de busca é exibida ao clicar no ícone de busca',
+  it('Search bar is displayed when clicking the search icon',
     () => {
       userEvent.click(screen.getByTestId('search-top-btn'));
       expect(screen.getByTestId('search-input')).toBeInTheDocument();

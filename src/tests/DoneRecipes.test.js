@@ -39,11 +39,11 @@ const befEachCallback = async () => {
 
 const path = '/done-recipes';
 
-describe('Página de detalhes de uma receita - renderização de cards e botões', () => {
+describe('Done Recipes page - cards and buttons', () => {
   beforeEach(befEachCallback);
   afterEach(() => localStorage.clear());
 
-  it('A tela de done recipes possui todos os atributos',
+  it('The done recipes screen has all the attributes',
     async () => {
       renderPath(path);
       expect(screen.getByTestId('filter-by-all-btn')).toBeInTheDocument();
@@ -64,11 +64,11 @@ describe('Página de detalhes de uma receita - renderização de cards e botões
     });
 });
 
-describe('Página done recipes - clique em botões', () => {
+describe('Done Recipes page - buttons', () => {
   beforeEach(befEachCallback);
   afterEach(() => localStorage.clear());
 
-  it('Verifica se o clique no botão Share copia link da receita', async () => {
+  it('Checks if clicking the Share button copies the recipe link', async () => {
     renderPath(path);
     Object.assign(window.navigator, {
       clipboard: {
@@ -81,7 +81,7 @@ describe('Página done recipes - clique em botões', () => {
       .toHaveBeenCalledWith('http://localhost:3000/foods/52771');
   });
 
-  it('Verifica o clique nos botões de filtro', async () => {
+  it('Checks the click on filter buttons', async () => {
     renderPath(path);
     userEvent.click(screen.getByTestId('filter-by-food-btn'));
     expect(screen.queryByTestId(secondImage)).not.toBeInTheDocument();

@@ -8,18 +8,18 @@ const userActions = () => {
   userEvent.click(screen.getByTestId(LOGIN_BTN));
 };
 
-describe('Tela de Login', () => {
+describe('Login', () => {
   beforeEach(() => {
     localStorage.clear();
     renderPath('/');
   });
-  it('Ao navegar para a rota /, os inputs e o botão especificados estão presentes',
+  it('When navigating to the / route, the specified inputs and button are present',
     () => {
       expect(screen.getByTestId(EMAIL_INPUT)).toBeInTheDocument();
       expect(screen.getByTestId(PASSWORD_INPUT)).toBeInTheDocument();
       expect(screen.getByTestId(LOGIN_BTN)).toBeInTheDocument();
     });
-  it('O botão só é habilitado se e-mail e senha forem válidos',
+  it('The button is only enabled if the email and password are valid',
     () => {
       expect(screen.getByTestId(EMAIL_INPUT).value).toBe('');
       expect(screen.getByTestId(PASSWORD_INPUT).value).toBe('');
@@ -38,7 +38,7 @@ describe('Tela de Login', () => {
       expect(screen.getByTestId(LOGIN_BTN)).toBeEnabled();
     });
   it(
-    'Ao clicar no botão habilitado, tokens e e-mail são salvos no localStorage',
+    'By clicking the enabled button, tokens and email are saved in the localStorage',
     () => {
       userActions();
       const storedEmail = JSON.parse(localStorage.getItem('user')).email;
@@ -49,7 +49,7 @@ describe('Tela de Login', () => {
       expect(storedDrinksToken).toBe(1);
     },
   );
-  it('Será validado se ao clicar no botão acontece o redirecionamento para a rota /foods',
+  it('Validates if clicking on the button it redirects to the /foods route',
     () => {
       userActions();
       expect(window.location.pathname).toBe('/foods');

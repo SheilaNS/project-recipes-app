@@ -1,9 +1,8 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderPath } from './helpers';
-// import fetchRequest from '../../cypress/mocks/fetch';
 
-describe('Barra de Busca na tela de Foods', () => {
+describe('Search bar', () => {
   beforeEach(async () => {
     localStorage.clear();
   });
@@ -11,13 +10,13 @@ describe('Barra de Busca na tela de Foods', () => {
 
   const searchId = 'search-top-btn';
 
-  it('O botão de search deve estar presente na página de Foods', () => {
+  it('The search button must be present on the Foods page', () => {
     renderPath('/foods');
     const searchBtn = screen.getByTestId(searchId);
     expect(searchBtn).toBeInTheDocument();
   });
 
-  it('Ao clicar no botão search os elementos especificados devem estar presentes', () => {
+  it('When clicking on the search button the specified elements must be present', () => {
     renderPath('/foods');
     const searchBtn = screen.getByTestId(searchId);
     userEvent.click(searchBtn);
@@ -34,7 +33,7 @@ describe('Barra de Busca na tela de Foods', () => {
     expect(excSearchBtn).toBeInTheDocument();
   });
 
-  it('Verifica se aparece um alerta ao colocar 2 letras no input de letras', () => {
+  it('Checks if an alert appears when putting 2 letters in the letter input', () => {
     renderPath('/foods');
 
     window.alert = jest.fn();

@@ -11,11 +11,11 @@ const befEachCallback = async () => {
 
 const path = '/foods/52771';
 
-describe('Página de detalhes de uma receita - renderização de cards e botões', () => {
+describe('Recipe detail page - card and button rendering', () => {
   beforeEach(befEachCallback);
   afterEach(() => jest.clearAllMocks());
 
-  it('A tela de comida possui todos os atributos',
+  it('The food screen has all the attributes',
     async () => {
       renderPath(path);
       expect(screen.getByTestId('recipe-photo')).toBeInTheDocument();
@@ -33,7 +33,7 @@ describe('Página de detalhes de uma receita - renderização de cards e botões
       expect(global.fetch).toHaveBeenCalled();
       expect(global.fetch).toHaveBeenCalledWith('https://www.themealdb.com/api/json/v1/1/lookup.php?i=52771');
     });
-  it('Verifica se os elementos do protótipo existem na tela', async () => {
+  it('Checks if all prototype elements exist on the screen', async () => {
     renderPath(path);
     const recipeImg = await screen.findByTestId('recipe-photo');
     expect(recipeImg.src).toBe('https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg');
@@ -42,7 +42,7 @@ describe('Página de detalhes de uma receita - renderização de cards e botões
   });
 });
 
-describe('Página de detalhes de receitas - clique em botões', () => {
+describe('Recipe detail page - buttons', () => {
   const favoriteRecipes = [
     {
       id: '52771',
@@ -57,13 +57,13 @@ describe('Página de detalhes de receitas - clique em botões', () => {
 
   beforeEach(befEachCallback);
   afterEach(() => jest.clearAllMocks());
-  it('Verifica se o clique no botão start leva para a página correta', async () => {
+  it('Checks that clicking the start button renders the correct page', async () => {
     const { history } = renderPath(path);
     const startBtn = await screen.findByTestId('start-recipe-btn');
     userEvent.click(startBtn);
     expect(history.location.pathname).toBe('/foods/52771/in-progress');
   });
-  it('Verifica se o clique no botão Share copia link da receita', async () => {
+  it('Checks if clicking the Share button copies the recipe link', async () => {
     renderPath(path);
     Object.assign(window.navigator, {
       clipboard: {
@@ -75,14 +75,14 @@ describe('Página de detalhes de receitas - clique em botões', () => {
     expect(global.navigator.clipboard.writeText)
       .toHaveBeenCalledWith('http://localhost:3000/foods/52771');
   });
-  it('Verifica o clique no botão de Favorito', async () => {
+  it('Checks the click on the Favorite button', async () => {
     renderPath(path);
     const favoriteBtn = await screen.findByTestId('favorite-btn');
     userEvent.click(favoriteBtn);
     const newFav = JSON.parse(localStorage.getItem('favoriteRecipes'));
     expect(newFav).toEqual(favoriteRecipes);
   });
-  it('Verifica se o botão Start está visível se a receita estiver feita', async () => {
+  it('Checks if the Start button is not visible if the recipe is done', async () => {
     localStorage.setItem('favoriteRecipes', JSON.stringify(favoriteRecipes));
     renderPath(path);
     const favoriteBtn = screen.queryByTestId('search-btn');

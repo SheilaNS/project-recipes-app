@@ -37,18 +37,18 @@ const befEachCallback = async () => {
     .mockImplementation((url) => fetchRequest(url));
 };
 
-describe('Página de explorar por ingredientes - renderização de cards e botões', () => {
+describe('Explore by ingredients page - cards and buttons rendering', () => {
   beforeEach(befEachCallback);
   afterEach(() => jest.clearAllMocks());
 
-  it('Ao navegar para rota /drinks/ingredients, os cards de ingrediente estão presentes',
+  it('When navigating to /drinks/ingredients route, ingredient cards are present',
     async () => {
       renderPath(path);
       const pageTitle = await screen.findByTestId('page-title');
       expect(pageTitle).toBeInTheDocument();
       checkFirstTwelveIng();
     });
-  it('Ao clicar no card, redireciona para a página /drinks',
+  it('When clicking on the card, redirects to the /drinks page',
     async () => {
       const { history } = renderPath(path);
       const recipeCard = await screen.findByTestId('0-ingredient-card');

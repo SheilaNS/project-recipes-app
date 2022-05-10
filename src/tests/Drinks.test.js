@@ -42,32 +42,32 @@ const beforeEachCallback = async () => {
     .mockImplementation((url) => fetchRequest(url));
 };
 
-describe('Página de receitas principal - renderização de cards e botões', () => {
+describe('Drink Recipes Page - Card and Button Rendering', () => {
   beforeEach(beforeEachCallback);
   afterEach(() => jest.clearAllMocks());
-  it('Ao navegar para a rota /foods, os botões de filtro estão presentes',
+  it('When navigating to /drinks route, the filter buttons are present',
     async () => {
       renderPath(path);
       expect(screen.getByTestId('All-category-filter')).toBeInTheDocument();
       drinkCategories.drinks.forEach(foreachCallback);
       expect(global.fetch).toHaveBeenCalled();
     });
-  it('Ao navegar para a rota /foods, os cards de receita estão presentes',
+  it('When navigating to /drinks route, the recipe cards are present',
     async () => {
       renderPath(path);
       filteredDrinks.forEach(foreachCallback);
     });
 });
 
-describe('Página de receitas principal - clique em botões', () => {
+describe('Drink Recipes Page - Buttons', () => {
   beforeEach(beforeEachCallback);
   afterEach(() => jest.clearAllMocks());
-  it('Ao clicar no botão "Cocktail", renderiza as receitas filtradas ',
+  it('Clicking the "Cocktail" button renders the filtered recipes',
     async () => {
       renderPath(path);
       checkFirstTwelveRecipes(cocktailDrinks.drinks, 'Cocktail');
     });
-  it('Ao clicar no botão "All", renderiza as todas receitas ',
+  it('Clicking the "All" button renders all recipes',
     async () => {
       renderPath(path);
       const allBtn = screen.getByTestId('All-category-filter');

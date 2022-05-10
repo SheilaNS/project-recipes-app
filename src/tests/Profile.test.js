@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderPath } from './helpers';
 
-describe('Tela de Profile', () => {
+describe('Profile', () => {
   beforeEach(async () => {
     localStorage.setItem('user', '{ "email": "email@mail.com" }');
     localStorage.setItem('mealsToken', '1');
@@ -16,7 +16,7 @@ describe('Tela de Profile', () => {
     jest.clearAllMocks();
   });
 
-  it('Verifica se os elementos aparecem na tela de Profile', () => {
+  it('Checks if elements appear on the Profile screen', () => {
     renderPath('/profile');
 
     const email = screen.getByTestId('profile-email');
@@ -29,7 +29,7 @@ describe('Tela de Profile', () => {
     expect(logoutBtn).toBeInTheDocument();
   });
 
-  it('Verifica se o localStorage é limpo ao clicar no botão de Logout', () => {
+  it('Checks if the localStorage is cleared when clicking the Logout button', () => {
     renderPath('/profile');
 
     expect(localStorage.getItem('user')).toBe('{ "email": "email@mail.com" }');
@@ -51,8 +51,8 @@ describe('Tela de Profile', () => {
   });
 });
 
-describe('Muda a tela:', () => {
-  it('Ao clicar no botão Done Recipes', () => {
+describe('Changes the screen:', () => {
+  it('By clicking the Done Recipes button', () => {
     const { history } = renderPath('/profile');
 
     const doneBtn = screen.getByTestId('profile-done-btn');
@@ -61,7 +61,7 @@ describe('Muda a tela:', () => {
     expect(history.location.pathname).toBe('/done-recipes');
   });
 
-  it('Ao clicar no botão Done Recipes', () => {
+  it('By clicking the Favorite Recipes button', () => {
     const { history } = renderPath('/profile');
 
     const favBtn = screen.getByTestId('profile-favorite-btn');

@@ -39,11 +39,11 @@ const befEachCallback = async () => {
 
 const path = '/favorite-recipes';
 
-describe('Página de favoritas', () => {
+describe('Favorite recipes page', () => {
   beforeEach(befEachCallback);
   afterEach(() => localStorage.clear());
 
-  it('A tela de done recipes possui todos os atributos',
+  it('The favorite recipes screen has all the attributes',
     async () => {
       renderPath(path);
       expect(screen.getByTestId('filter-by-all-btn')).toBeInTheDocument();
@@ -62,11 +62,11 @@ describe('Página de favoritas', () => {
     });
 });
 
-describe('Página favoritas - clique em botões', () => {
+describe('Favorite recipes page - buttons', () => {
   beforeEach(befEachCallback);
   afterEach(() => localStorage.clear());
 
-  it('Verifica se o clique no botão Share copia link da receita', async () => {
+  it('Checks if clicking the Share button copies the recipe link', async () => {
     renderPath(path);
     Object.assign(window.navigator, {
       clipboard: {
@@ -79,7 +79,7 @@ describe('Página favoritas - clique em botões', () => {
       .toHaveBeenCalledWith('http://localhost:3000/foods/52771');
   });
 
-  it('Verifica o clique nos botões de filtro', async () => {
+  it('Checks the click on filter buttons', async () => {
     renderPath(path);
     userEvent.click(screen.getByTestId('filter-by-food-btn'));
     expect(screen.queryByTestId(secondImage)).not.toBeInTheDocument();
@@ -94,7 +94,7 @@ describe('Página favoritas - clique em botões', () => {
     expect(screen.getByTestId(secondShareBtn)).toBeInTheDocument();
     expect(screen.getByTestId(secondFavoriteBtn)).toBeInTheDocument();
   });
-  it('Verifica o clique no botão de desfavoritar', async () => {
+  it('Checks the click on the unfavorite button', async () => {
     renderPath(path);
     userEvent.click(screen.getByTestId(secondFavoriteBtn));
     expect(screen.queryByTestId(secondImage)).not.toBeInTheDocument();

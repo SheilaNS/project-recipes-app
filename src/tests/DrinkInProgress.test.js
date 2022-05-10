@@ -11,11 +11,11 @@ const befEachCallback = async () => {
 
 const path = '/drinks/178319/in-progress';
 
-describe('Página de detalhes de uma receita - renderização de cards e botões', () => {
+describe('Drink in progress page - card and button rendering', () => {
   beforeEach(befEachCallback);
   afterEach(() => jest.clearAllMocks());
 
-  it('A tela de comida possui todos os atributos',
+  it('Drink screen has all attributes',
     async () => {
       renderPath(path);
       expect(screen.getByTestId('recipe-photo')).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe('Página de detalhes de uma receita - renderização de cards e botões
       expect(global.fetch).toHaveBeenCalled();
       expect(global.fetch).toHaveBeenCalledWith('https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=178319');
     });
-  it('Verifica se os elementos do protótipo existem na tela', async () => {
+  it('Checks if prototype elements exist on the screen', async () => {
     renderPath(path);
     const recipeImg = await screen.findByTestId('recipe-photo');
     expect(recipeImg.src).toBe('https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg');
@@ -39,7 +39,7 @@ describe('Página de detalhes de uma receita - renderização de cards e botões
   });
 });
 
-describe('Página de detalhes de receitas - clique em botões', () => {
+describe('Drink in Progress page - button events', () => {
   const favoriteRecipes = [{
     id: '178319',
     type: 'drink',
@@ -52,7 +52,7 @@ describe('Página de detalhes de receitas - clique em botões', () => {
 
   beforeEach(befEachCallback);
   afterEach(() => jest.clearAllMocks());
-  it('Verifica se o clique no botão finish leva para a página correta', async () => {
+  it('Checks that clicking the finish button takes you to the correct page', async () => {
     const { history } = renderPath(path);
     const checkboxes = await screen.findAllByRole('checkbox');
     checkboxes.forEach((checkbox) => {
@@ -62,7 +62,7 @@ describe('Página de detalhes de receitas - clique em botões', () => {
     userEvent.click(finishBtn);
     expect(history.location.pathname).toBe('/done-recipes');
   });
-  it('Verifica se o clique no botão Share copia link da receita', async () => {
+  it('Checks if clicking the Share button copies the recipe link', async () => {
     renderPath(path);
     Object.assign(window.navigator, {
       clipboard: {
@@ -74,7 +74,7 @@ describe('Página de detalhes de receitas - clique em botões', () => {
     expect(global.navigator.clipboard.writeText)
       .toHaveBeenCalledWith('http://localhost:3000/drinks/178319');
   });
-  it('Verifica o clique no botão de Favorito', async () => {
+  it('Checks the click on the Favorite button', async () => {
     renderPath(path);
     const favoriteBtn = await screen.findByTestId('favorite-btn');
     userEvent.click(favoriteBtn);

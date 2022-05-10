@@ -1,9 +1,9 @@
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { renderPath } from './helpers';
 import fetchRequest from '../../cypress/mocks/fetch';
-import meals from '../../cypress/mocks/meals';
 import japaneseMeals from '../../cypress/mocks/japaneseMeals';
+import meals from '../../cypress/mocks/meals';
+import { renderPath } from './helpers';
 
 const page = '/explore/foods/nationalities';
 
@@ -15,13 +15,13 @@ const getNationalities = (area) => {
   return areas;
 };
 
-describe('Tela Explore Nationalities', () => {
+describe('Explore Nationalities screen', () => {
   beforeEach(() => {
     jest.spyOn(global, 'fetch')
       .mockImplementation((url) => fetchRequest(url));
   });
   afterEach(() => jest.clearAllMocks());
-  it('Verifica se aparecem 12 cards na tela', () => {
+  it('Checks if 12 cards appear on the screen', () => {
     renderPath(page);
 
     const title = screen.getByRole('heading',
@@ -29,7 +29,7 @@ describe('Tela Explore Nationalities', () => {
     expect(title).toBeInTheDocument();
   });
 
-  it('Verifica se aparecem os elementos especificados na tela', async () => {
+  it('Checks whether the specified elements appear on the screen', async () => {
     renderPath(page);
 
     const dropdownInput = screen.getByTestId('explore-by-nationality-dropdown');
@@ -43,13 +43,13 @@ describe('Tela Explore Nationalities', () => {
   });
 });
 
-describe('Mostra na tela as receitas das seguintes nacionalidades:', () => {
+describe('It shows on the screen the recipes of the required nationalities', () => {
   beforeEach(() => {
     jest.spyOn(global, 'fetch')
       .mockImplementation((url) => fetchRequest(url));
   });
 
-  it('Japonesa', async () => {
+  it('Japanese', async () => {
     renderPath(page);
 
     const dropdownInput = await screen.findByTestId('explore-by-nationality-dropdown');
