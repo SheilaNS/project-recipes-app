@@ -1,4 +1,4 @@
-import { act, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import beefMeals from '../../cypress/mocks/beefMeals';
 import breakfastMeals from '../../cypress/mocks/breakfastMeals';
@@ -41,10 +41,9 @@ const foreachCallback = async ({ strCategory }) => {
   expect(categoryBtn).toBeInTheDocument();
 };
 
+const path = '/foods';
+
 const befEachCallback = async () => {
-  await act(async () => {
-    renderPath('/foods');
-  });
   jest.spyOn(global, 'fetch')
     .mockImplementation((url) => fetchRequest(url));
 };
@@ -55,11 +54,14 @@ describe('Página de receitas principal - renderização de cards e botões', ()
 
   it('Ao navegar para a rota /foods, os botões de filtro estão presentes',
     async () => {
+      renderPath(path);
       expect(screen.getByTestId('All-category-filter')).toBeInTheDocument();
       mealCategories.meals.forEach(foreachCallback);
+      expect(global.fetch).toHaveBeenCalled();
     });
   it('Ao navegar para a rota /foods, os cards de receita estão presentes',
     async () => {
+      renderPath(path);
       filteredMeals.forEach(foreachCallback);
     });
 });
@@ -70,30 +72,37 @@ describe('Página de receitas principal - clique em botões', () => {
 
   it('Ao clicar no botão "Beef", renderiza as receitas filtradas ',
     async () => {
+      renderPath(path);
       checkFirstTwelveRecipes(beefMeals.meals, 'Beef');
     });
   it('Ao clicar no botão "Breakfest", renderiza as receitas filtradas ',
     async () => {
+      renderPath(path);
       checkFirstTwelveRecipes(breakfastMeals.meals, 'Breakfest');
     });
   it('Ao clicar no botão "Chicken", renderiza as receitas filtradas ',
     async () => {
+      renderPath(path);
       checkFirstTwelveRecipes(chickenMeals.meals, 'Chicken');
     });
   it('Ao clicar no botão "Dessert", renderiza as receitas filtradas ',
     async () => {
+      renderPath(path);
       checkFirstTwelveRecipes(dessertMeals.meals, 'Dessert');
     });
   it('Ao clicar no botão "Goat", renderiza as receitas filtradas ',
     async () => {
+      renderPath(path);
       checkFirstTwelveRecipes(goatMeals.meals, 'Goat');
     });
   it('Ao clicar no botão "Soup", renderiza as receitas filtradas ',
     async () => {
+      renderPath(path);
       checkFirstTwelveRecipes(soupMeals.meals, 'Soup');
     });
   it('Ao clicar no botão "All", renderiza as todas receitas ',
     async () => {
+      renderPath(path);
       const allBtn = screen.getByTestId('All-category-filter');
       userEvent.click(allBtn);
 

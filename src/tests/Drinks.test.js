@@ -1,4 +1,4 @@
-import { act, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import cocktailDrinks from '../../cypress/mocks/cocktailDrinks';
 import fetchRequest from '../../cypress/mocks/fetch';
@@ -35,10 +35,9 @@ const foreachCallback = async ({ strCategory }) => {
   expect(categoryBtn).toBeInTheDocument();
 };
 
+const path = '/drinks';
+
 const beforeEachCallback = async () => {
-  await act(async () => {
-    renderPath('/drinks');
-  });
   jest.spyOn(global, 'fetch')
     .mockImplementation((url) => fetchRequest(url));
 };
@@ -48,11 +47,14 @@ describe('Página de receitas principal - renderização de cards e botões', ()
   afterEach(() => jest.clearAllMocks());
   it('Ao navegar para a rota /foods, os botões de filtro estão presentes',
     async () => {
+      renderPath(path);
       expect(screen.getByTestId('All-category-filter')).toBeInTheDocument();
       drinkCategories.drinks.forEach(foreachCallback);
+      expect(global.fetch).toHaveBeenCalled();
     });
   it('Ao navegar para a rota /foods, os cards de receita estão presentes',
     async () => {
+      renderPath(path);
       filteredDrinks.forEach(foreachCallback);
     });
 });
@@ -62,10 +64,12 @@ describe('Página de receitas principal - clique em botões', () => {
   afterEach(() => jest.clearAllMocks());
   it('Ao clicar no botão "Cocktail", renderiza as receitas filtradas ',
     async () => {
+      renderPath(path);
       checkFirstTwelveRecipes(cocktailDrinks.drinks, 'Cocktail');
     });
   it('Ao clicar no botão "All", renderiza as todas receitas ',
     async () => {
+      renderPath(path);
       const allBtn = screen.getByTestId('All-category-filter');
       userEvent.click(allBtn);
 

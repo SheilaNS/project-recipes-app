@@ -13,7 +13,6 @@ function Favorites() {
   const [renderRecipes, setRenderRecipes] = useState([]);
 
   const handleCopy = ({ currentTarget: { name, id } }) => {
-    console.log(name, id);
     copy(`http://localhost:3000/${name}s/${id}`);
     setIsCopied(true);
   };
