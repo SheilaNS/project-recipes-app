@@ -52,9 +52,7 @@ describe('Página de detalhes de receitas - clique em botões', () => {
     image: 'https://www.thecocktaildb.com/images/media/drink/zvsre31572902738.jpg',
     nationality: '',
   }];
-  const heartIcon = (color) => (color === 'white'
-    ? '<img src=\"whiteHeartIcon.svg\" alt=\"white heart\">'
-    : '<img src=\"blackHeartIcon.svg\" alt=\"black heart\">');
+
   beforeEach(befEachCallback);
   afterEach(() => jest.clearAllMocks());
   it('Verifica se o clique no botão start leva para a página correta', async () => {
